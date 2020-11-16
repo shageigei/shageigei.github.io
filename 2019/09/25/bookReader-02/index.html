@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="介绍：​    UIPageViewController是一个用来管理内容页之间导航的容器控制器(container view controller)，其中每个子页面由子视图控制器管理。内容页间导航可以由用户手势触发，也可以由代码控制。 ​    它提供了一种分页效果来显示其childController的View。用户可以通过手势像翻书一样切换页面。切换页面时看起来是连续的，但静止状态下UIPa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小说阅读器（二）—— UIPageViewController">
+<meta property="og:url" content="http://langg.top/2019/09/25/bookReader-02/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="介绍：​    UIPageViewController是一个用来管理内容页之间导航的容器控制器(container view controller)，其中每个子页面由子视图控制器管理。内容页间导航可以由用户手势触发，也可以由代码控制。 ​    它提供了一种分页效果来显示其childController的View。用户可以通过手势像翻书一样切换页面。切换页面时看起来是连续的，但静止状态下UIPa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://langg.top/2019/09/25/bookReader-02/book2_pageVC_1.gif">
+<meta property="og:image" content="http://langg.top/2019/09/25/bookReader-02/book2_pageVC_2.gif">
+<meta property="og:image" content="http://langg.top/2019/09/25/bookReader-02/book2_pageVC_3.gif">
+<meta property="og:updated_time" content="2019-09-25T08:29:47.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小说阅读器（二）—— UIPageViewController">
+<meta name="twitter:description" content="介绍：​    UIPageViewController是一个用来管理内容页之间导航的容器控制器(container view controller)，其中每个子页面由子视图控制器管理。内容页间导航可以由用户手势触发，也可以由代码控制。 ​    它提供了一种分页效果来显示其childController的View。用户可以通过手势像翻书一样切换页面。切换页面时看起来是连续的，但静止状态下UIPa">
+<meta name="twitter:image" content="http://langg.top/2019/09/25/bookReader-02/book2_pageVC_1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/09/25/bookReader-02/"/>
+
+
+
+
+
+  <title>小说阅读器（二）—— UIPageViewController | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/09/25/bookReader-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">小说阅读器（二）—— UIPageViewController</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-25T12:35:30+08:00">
+                2019-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h6 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h6><p>​    UIPageViewController是一个用来管理内容页之间导航的容器控制器(container view controller)，其中每个子页面由子视图控制器管理。内容页间导航可以由用户手势触发，也可以由代码控制。</p>
+<p>​    它提供了一种分页效果来显示其childController的View。用户可以通过手势像翻书一样切换页面。切换页面时看起来是连续的，但静止状态下UIPageViewController同时只有一个childViewController。它的导航效果是通过替换childController实现的。</p>
+<p>​    这是一种非常有效的设计：无论是三两个还上千个页面，用户的翻页与导航处理都是无差别的。因为这些页面都是即时创建的，每个页面只有当你浏览它的时候才会存在。这种设计显然苹果更多地考虑了内存的问题和通用性。</p>
+<a id="more"></a>
+<p><strong><em>初始化：</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)initWithTransitionStyle:(UIPageViewControllerTransitionStyle)style navigationOrientation:(UIPageViewControllerNavigationOrientation)navigationOrientation options:(nullable NSDictionary&lt;UIPageViewControllerOptionsKey, id&gt; *)options NS_DESIGNATED_INITIALIZER;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UIPageViewControllerTransitionStyle:     style翻页模式包含2种：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIPageViewControllerTransitionStyle) &#123;</span><br><span class="line">    UIPageViewControllerTransitionStylePageCurl = 0, // Navigate between views via a page curl transition.  卷页过渡模式</span><br><span class="line">    UIPageViewControllerTransitionStyleScroll = 1 // Navigate between views by scrolling. 滚动过渡模式</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UIPageViewControllerNavigationOrientation:   navigationOrientation翻页方向：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_ENUM(NSInteger, UIPageViewControllerNavigationOrientation) &#123;</span><br><span class="line">    UIPageViewControllerNavigationOrientationHorizontal = 0,		//水平方向：左右</span><br><span class="line">    UIPageViewControllerNavigationOrientationVertical = 1			//垂直方向：上下</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UIPageViewControllerOptionsKey：options选项字典：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Key for specifying spine location in options dictionary argument to initWithTransitionStyle:navigationOrientation:options:.</span><br><span class="line">// Value should be a &apos;UIPageViewControllerSpineLocation&apos; wrapped in an NSNumber.</span><br><span class="line">// Only valid for use with page view controllers with transition style &apos;UIPageViewControllerTransitionStylePageCurl&apos;.</span><br><span class="line">//脊柱位置 ***只对卷页过渡效果有效UIPageViewControllerTransitionStylePageCurl***</span><br><span class="line">UIKIT_EXTERN UIPageViewControllerOptionsKey const UIPageViewControllerOptionSpineLocationKey;</span><br><span class="line"></span><br><span class="line">// Key for specifying spacing between pages in options dictionary argument to initWithTransitionStyle:navigationOrientation:options:.</span><br><span class="line">// Value should be a CGFloat wrapped in an NSNumber. Default is &apos;0&apos;.</span><br><span class="line">// Only valid for use with page view controllers with transition style &apos;UIPageViewControllerTransitionStyleScroll&apos;.</span><br><span class="line">//页面之间的间距***只对滚动过渡模式有效UIPageViewControllerTransitionStyleScroll*** CGFloat类型</span><br><span class="line">UIKIT_EXTERN UIPageViewControllerOptionsKey const UIPageViewControllerOptionInterPageSpacingKey API_AVAILABLE(ios(6.0));</span><br></pre></td></tr></table></figure>
+<p>展示一页，如图：</p>
+<p><img src="/2019/09/25/bookReader-02/book2_pageVC_1.gif" style="width:200px"></p>
+<p>书脊在中间，如图</p>
+<p>：<img src="/2019/09/25/bookReader-02/book2_pageVC_2.gif" style="width:300px"></p>
+<p><strong><em>添加子视图</em></strong></p>
+<p>​    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)setViewControllers:(nullable NSArray&lt;UIViewController *&gt; *)viewControllers direction:(UIPageViewControllerNavigationDirection)direction animated:(BOOL)animated completion:(void (^ __nullable)(BOOL finished))completion;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>参数viewControllers:</p>
+<p>  UIPageViewControllerOptionsKey：<br>  为提供的一个或两个视图控制器,取决于UIPageViewControllerOptionSpineLocationKey的值当locationKey为UIPageViewControllerSpineLocationMid时viewControllers为两个视图控制器,其他情况为单个控制器.<br>  即：当为mid时，书脊在中间</p>
+</li>
+<li>direction:方向根据初始化时navigationOrientation的方向进行改变</li>
+<li>UIPageViewControllerNavigationDirectionForward 正向<br>UIPageViewControllerNavigationDirectionReverse 反向<br>​</li>
+</ul>
+<p><strong><em>代理方法</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//过度动画开始之前(将要翻页)</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray&lt;UIViewController *&gt; *)pendingViewControllers API_AVAILABLE(ios(6.0));</span><br><span class="line"></span><br><span class="line">//UIPageViewController翻页完成的代理,如果翻页过程中取消翻页，则completed＝ false</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray&lt;UIViewController *&gt; *)previousViewControllers transitionCompleted:(BOOL)completed;</span><br><span class="line"></span><br><span class="line">//设置书脊的位置</span><br><span class="line">- (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation API_UNAVAILABLE(tvos);</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">	以下两个delegate方式在卷页过渡效果时设置UIPageViewControllerTransitionStylePageCurl</span><br><span class="line">*/</span><br><span class="line">//返回视图控制器支持的所有方向</span><br><span class="line">- (UIInterfaceOrientationMask)pageViewControllerSupportedInterfaceOrientations:(UIPageViewController *)pageViewController API_AVAILABLE(ios(7.0)) API_UNAVAILABLE(tvos);</span><br><span class="line"></span><br><span class="line">//返回视图控制器的首选方向</span><br><span class="line">- (UIInterfaceOrientation)pageViewControllerPreferredInterfaceOrientationForPresentation:(UIPageViewController *)pageViewController API_AVAILABLE(ios(7.0)) API_UNAVAILABLE(tvos);</span><br></pre></td></tr></table></figure>
+<p><strong><em>数据源方法</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//往前翻页</span><br><span class="line">- (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController;</span><br><span class="line"></span><br><span class="line">//往后翻页</span><br><span class="line">- (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController;</span><br><span class="line"></span><br><span class="line">// The number of items reflected in the page indicator.配置页指示器总数</span><br><span class="line">- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController API_AVAILABLE(ios(6.0)); </span><br><span class="line">// 当前页指示器索引</span><br><span class="line">- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController API_AVAILABLE(ios(6.0));</span><br></pre></td></tr></table></figure>
+<h6 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h6><p>示例代码：</p>
+<ul>
+<li>首先创建一个数据模型model，在model里我们写上UIPageViewController的数据源<uipageviewcontrollerdatasource>,然后配置文本信息。</uipageviewcontrollerdatasource></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line">@class ReadPageViewController;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface ReadModel : NSObject&lt;UIPageViewControllerDataSource&gt;</span><br><span class="line"></span><br><span class="line">- (ReadPageViewController *)viewControllerAtIndex:(NSUInteger)index;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line"></span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;ReadModel.h&quot;</span><br><span class="line">#import &quot;ReadPageViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ReadModel()</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong, readonly) NSArray *days;</span><br><span class="line">@property (nonatomic, strong, readonly) NSArray *quotes;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ReadModel</span><br><span class="line"></span><br><span class="line">- (instancetype)init &#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        // 创建数据模型。</span><br><span class="line">        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];</span><br><span class="line">        _days = [[dateFormatter weekdaySymbols] copy];</span><br><span class="line">        </span><br><span class="line">        _quotes = @[</span><br><span class="line">            @&quot;雪又开始下了。刚刚还是湛蓝的飘着几朵白云天空，瞬间就被飓风卷来的暴雪遮住了，四周立即变得白茫茫的一片，让人一时无法看清前面的方向。荒鹰雪山一年四季都被积雪掩盖，蓝天白云在这里只是过眼云烟，更的多时间都是无尽的暴雪。天然恶劣的地理环境使这座山鲜有人烟，偶尔空中有几只雄鹰飞过，但这里是灵碧草原的族人们到达圣云帝都的必经之路。一个身材娇小的红衣少女在雪山中缓缓的跋涉前进着，两支巨大的雄鹰在少女的上方盘旋，使少女的身影在这狂风暴雪中不再显得不再那么的孤单。雄鹰们在空中肆无忌惮的飞着，一会儿就变成了两个黑点一下子就不见了，一会儿又飞回了少女的身边好像在给少女指着前进的方向。“怎么还没有到啊。”少女摸了摸落在她面前的一只雄鹰嘟哝着 “已经走了快两个月了”，突然一阵寒风吹来，少女打了个寒颤停住了脚步。虽然少女身穿厚重的兽皮大衣，但是在这高山稀薄而又极度寒冷的空气下还是冻得瑟瑟发抖。“应该很快就到了。”少女看着远方若隐若现白鹭神殿，喃喃自语道，“终于要见到你了，哥哥”。&quot;,</span><br><span class="line">            @&quot;几百年了，坐落在圣云帝都白鹭之塔依旧是那样的华丽，高耸入云的白塔是帝都王者的标志，象征着无上的权力和对神族的信仰。那是人类未来纪念神族而特别修建的，周围白色雾气缭绕，如同置身于仙境一般。这就是神所眷恋的伽罗大陆，虽然神族早已在两百年前就失去了肉体，他们的灵魂离开了这个大陆去了这座巨岛上空的腾云之城，但神族仍然是这个大陆的精神主宰。腾云之城在伽罗大陆的人们看来，就如同天上的一颗繁星一般遥不可及，但神族所留下的古迹岚月祭坛坐落在伽罗大陆的中心里面封印着强大的上古力量，由精灵和人族共同看守，这如今这个祭坛已经成为了废墟。所有在伽罗大陆上的种族都敬仰着神族，尤其是人类。人类是这个大陆中唯一不会任何法术的种族，因为神灵的庇护，人类的祖先得以在这个大陆上繁衍生息并把这个信仰一代代的传承下来。尽管神族参透了世间的生死、无欲无求，但古代的帝王依旧是神族为最高的信仰，甚至为此耗费了几代的王朝以及上万的族人修建了白鹭之塔用来表达对神族崇敬。“神会一直保护着我们吧”，少女望着白鹭之塔发着呆。&quot;,</span><br><span class="line">            @&quot;一阵寒风夹杂着雪花又吹了过来，怒号般的风声从她的耳边呼啸而过，一下子吹起了她厚厚的棉帽，少女连忙用手遮住了头，稳住脚步，四处张望着寻找避风之处。少女的脸已经冻得没有一丝血色，但还是紧紧握着手中的那枯树枝做的登山杖，咬紧牙关顶着风雪艰难的走着。雪山上的巨大冰柱在下白天是一副闪闪发光的景象，围绕着雪花有一种腾云驾雾的感觉。只是这次，也是第一次，是自己一个人穿越荒鹰雪山，难免会感觉有一些寂寞。生活在灵碧草原的族人是大自然中的英雄。两百年来，自从第一批边境守卫者定居到这里，这里人们从小就练习各种骑术以及各种驯兽之术。在草原中骑着骏马打猎，在雪山中追随着飞舞的雄鹰，以及在夜空下的篝火中翩翩起舞已经成为这里人们的习惯。在草原长大的少女也是如此，她自幼就很会这些技能，现在即使一个人穿越荒鹰学山也没有感到丝毫的费力与恐惧，就是凛冽的寒风令她行走有一些吃力。突然，远方飞舞的雄鹰叫了起来，少女抬头望向天空，越来越多的雪花在她的头顶上空飞舞着，风声也变得开始震耳欲聋了，少女不由得一惊，知道特大的暴风雪就要来了，不由得加快了脚步。&quot;,</span><br><span class="line">            @&quot;暴风雪中的山路是格外的难走，雪花落到地上瞬间就已经结成厚厚的冰。经过多日的长途跋涉，少女已经疲惫不堪，脚步逐渐的就缓了下来。这时又一阵寒风席卷而来，纷乱的雪花挡住了她的视线，她揉了揉眼睛试图冷静下来，但没有看到脚下有一块巨大的冰砖，于是踩到上面的一瞬间，脚下一滑就顺着雪山的坡径直滚了下去。在滑落的过程中少女的头撞到了一颗石头上，她逐渐地失去意识，但身体还是不断地沿着坡道滑下。雪坡上的碎冰划破了她的脸，她能感受到流下的鲜血在她脸上还是温暖的，但意识已经模糊，慢慢地就什么都不记得了。&quot;,</span><br><span class="line">            @&quot;就在那一刻她的眼前好像出现了一道洁白的光，温暖而又神圣，光中隐约闪现出熊熊的火焰，一群人在围绕在火焰的傍边跳着舞，那优美的舞姿让人看得眼花缭乱。“哥哥， 圣云帝都是什么样子？”草原中的火光中，一个身穿红色长裙的少女依偎在一个相貌英俊的穿着战士制服的黑发少年身旁。“等你长大了，我就带你一起去。”少年轻轻地摸了摸少女乌黑的头发，微笑着对她说着，他的眼里流露出怜爱的神色。、“一言为定。”少女也笑了，激动的握住了少年的手，但不是为什么她感到少年的手是如此的冰冷，似乎没有任何温度。“哥哥，你的手......”少女欲言又止，火焰的光一下子暗了下来，四周逐渐被黑暗吞噬，少年的身影一下子就被卷入了黑暗中。“哥哥，不要走。”少女撕心裂肺的喊道，伸手试图抓住少年，但是少年的身影越来越远，逐渐的消失了。少女不顾一切地追向那一片的黑暗，跑着跑着，突然脚下一个踉跄，绝望的摔倒在地上。哥哥！少女尖叫着，睁开了眼睛。她发现自己躺在一个山洞里的篝火旁。篝火微弱的红光使周围的空气被这种温暖的光覆盖，丝毫感受不到山洞外面刺骨的寒意。&quot;,</span><br><span class="line">            @&quot;少女坐起来环视着四周，心中不禁默念道，“这是哪里呢？”。从雪山上滑落撞到头的一瞬间，她的脑袋里一片空白，什么都不记得了，只依稀记得滚下山坡时被冰划到脸上的那股阵阵的疼痛。想到这里，她用手不自觉的摸了摸自己的脸。令少女感到惊讶的是，脸的温度已经从在雪山中的冰凉变得暖暖的了，脸颊上被冰划到的伤口竟然一点都感觉不到疼了，就似乎完全消失了一样。“你醒了？”一个男子的声音从洞口处传来，少女随着声音转过头看去。在火光中她看到一个同样穿着毛茸茸的兽皮大衣拥有湛蓝瞳孔的少年抱着一捆枯萎的树枝朝她走来。“我怎么会在这里，难道是你救了我？”少女疑惑的看着少年，站了起来，朝他走过去。“你最好不要乱动”，少年放下树枝，连忙跑过去扶住了少女的胳膊说道，“你的伤才刚刚好”。那个声音充满着磁性和关怀，有种兄长般的温柔和体贴。“哥哥”少女的眼睛瞬间朦胧了，不由自主的小声喊道，双手抓住了少年了衣袖，眼里的泪水似乎要夺眶而出。突然，她好像意识到了什么，连忙松开了手，后退了几步，连声道歉。&quot;,</span><br><span class="line">            @&quot;“对不起，我……”，少女的脸刷的一下就红了，双手背到身后，低下了头像一个做错事的孩子不敢看少年的眼睛。“怎么，把我当成你的兄长了？”少年微微的扬起了嘴角，那蓝色的眼里流露出一种似笑非笑的表情，然后他凝视着少女那张通红的脸问道，“怎么样，还疼吗？”“我很好，什么事都没有啊。”少女一下子来了精神，在少年面前转了一个圈，“你看，你看”，少女带着她那清脆声音对少年欢快地笑着。虽然穿着厚厚的兽皮外衣，但少女轻快优雅的身影在朦胧的火光犹如同飞舞的蝴蝶，那一袭红色的外衣给微弱的火焰也增添了一丝生气。那身影好熟悉，好像在哪里见过，少年凝视着她许久，幽声说道，“看来，我的治愈术还是管用的。”治愈术？少女听到少年的话怔了一下，连忙抬起了头，盯着少年的眼睛问道，“治愈术和蓝色的眼睛，难道……你是……”“不错，我是精灵。”少年微笑着，缓缓的摘下了头上的帽子，露出了一头金色的短发和那只有精灵才有的又长又尖的耳朵。“哇，是精灵啊”少女兴奋的跳了起来，脸中难掩喜悦之情，“以前只在古籍中听说过精灵族，小时候也听哥哥说到过，今天是第一次见到真正的精灵！”少女说着，跑到少年面前凑近了一些仔细打量。少年看着手舞足蹈的少女，并不介意她略微失礼的言行反而笑了起来。“怎么，你以前没有见过精灵吗？圣云帝都中有很多的精灵住在那里啊，倒是龙族……”少年说道这里，表情一沉，便停住了。“这是我第一次穿越雪山去圣云帝都， 以前只来过雪山山脚采药，都是和哥哥或者小伙伴们一起来的。”少女没有注意到少年表情的变化，继续说道，“我一直想看看圣云帝都是什么样子，关于它的描写我只看过古籍中的记载。”&quot;</span><br><span class="line">                    ];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line">- (ReadPageViewController *)viewControllerAtIndex:(NSUInteger)index &#123;</span><br><span class="line">    // 返回指定index的视图控制器。</span><br><span class="line">    if (self.days.count == 0 || index &gt;= self.days.count) &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    ReadPageViewController *dataVC = [[ReadPageViewController alloc] init];</span><br><span class="line">    dataVC.itemIndex = index;</span><br><span class="line">    dataVC.day = self.days[index];</span><br><span class="line">    dataVC.quote = self.quotes[index];</span><br><span class="line">    return dataVC;</span><br><span class="line">&#125;</span><br><span class="line">#pragma mark -UIPageViewController DataSource</span><br><span class="line">- (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerAfterViewController:(nonnull UIViewController *)viewController &#123;</span><br><span class="line">     // 返回下一个视图控制器。</span><br><span class="line">       NSUInteger index = ((ReadPageViewController *)viewController).itemIndex;</span><br><span class="line">       if (index == self.days.count - 1 || index == NSNotFound) &#123;</span><br><span class="line">           return nil;</span><br><span class="line">       &#125;</span><br><span class="line">       ++index;</span><br><span class="line">       return [self viewControllerAtIndex:index];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerBeforeViewController:(nonnull UIViewController *)viewController &#123;</span><br><span class="line">    </span><br><span class="line">     // 返回上一个视图控制器。</span><br><span class="line">       NSUInteger index = ((ReadPageViewController *)viewController).itemIndex;</span><br><span class="line">       if (index == 0 || index == NSNotFound) &#123;</span><br><span class="line">           return nil;</span><br><span class="line">       &#125; </span><br><span class="line">       --index;</span><br><span class="line">       return [self viewControllerAtIndex:index];</span><br><span class="line">&#125;</span><br><span class="line">//返回初始页</span><br><span class="line">- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController &#123; </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line">// 共多少页。</span><br><span class="line">- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController &#123;</span><br><span class="line">    return self.days.count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建显示文本的容器<code>ReadPageViewController</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    self.view.backgroundColor = [UIColor brownColor];</span><br><span class="line">    [self.view addSubview:self.dayLabel];</span><br><span class="line">    [self.view addSubview:self.quoteLabel];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">- (void)viewWillAppear:(BOOL)animated&#123;</span><br><span class="line">    [super viewWillAppear:animated];</span><br><span class="line">    self.dayLabel.text = [NSString stringWithFormat:@&quot;Page %lu %@&quot;,self.itemIndex + 1, [self.day description]];</span><br><span class="line">    self.quoteLabel.text = self.quote;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - Getters &amp; Setters</span><br><span class="line">- (UILabel *)dayLabel &#123;</span><br><span class="line">    if (!_dayLabel) &#123;</span><br><span class="line">        _dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, CGRectGetWidth(self.view.bounds), 20)];</span><br><span class="line">        _dayLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];</span><br><span class="line">        _dayLabel.textAlignment = NSTextAlignmentCenter;</span><br><span class="line">    &#125;</span><br><span class="line">    return _dayLabel;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (UILabel *)quoteLabel &#123;</span><br><span class="line">    if (!_quoteLabel) &#123;</span><br><span class="line">        _quoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 50)];</span><br><span class="line">        _quoteLabel.frame = CGRectInset(_quoteLabel.frame, 16, 0);</span><br><span class="line">        _quoteLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];</span><br><span class="line">        _quoteLabel.textAlignment = NSTextAlignmentCenter;</span><br><span class="line">        _quoteLabel.numberOfLines = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    return _quoteLabel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建rootViewController：在这个控制器中放<code>UIPageViewController</code>然后初始化配置，并设置代理。</li>
+</ul>
+<p>此时，就可以进行操作翻页了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;RootViewController.h&quot;</span><br><span class="line">#import &quot;ReadPageViewController.h&quot;</span><br><span class="line">#import &quot;ReadModel.h&quot;</span><br><span class="line"></span><br><span class="line">@interface RootViewController ()&lt;UIPageViewControllerDelegate&gt;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIPageViewController *pageViewController;</span><br><span class="line">@property (nonatomic, strong) ReadModel *model;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, assign) NSUInteger currentIndex;</span><br><span class="line">@property (nonatomic, assign) NSUInteger nextIndex;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation RootViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // 初始化并配置pageViewController。</span><br><span class="line">    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl                                                        navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal                                                                options:@&#123;UIPageViewControllerOptionInterPageSpacingKey : @20&#125;];</span><br><span class="line">    ReadPageViewController *dataVC = [self.model viewControllerAtIndex:0];</span><br><span class="line">    [self.pageViewController setViewControllers:@[dataVC]</span><br><span class="line">                                      direction:UIPageViewControllerNavigationDirectionForward</span><br><span class="line">                                       animated:YES</span><br><span class="line">                                     completion:nil];</span><br><span class="line">    // 设置代理。</span><br><span class="line">    self.pageViewController.dataSource = self.model;</span><br><span class="line">    self.pageViewController.delegate = self;</span><br><span class="line">    </span><br><span class="line">    // 设置pageViewController inset。</span><br><span class="line">    CGRect pageViewRect = self.view.bounds;</span><br><span class="line">    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) &#123;</span><br><span class="line">        pageViewRect = CGRectInset(pageViewRect, 40, 40);</span><br><span class="line">    &#125;</span><br><span class="line">    self.pageViewController.view.frame = pageViewRect;</span><br><span class="line">    // 添加视图控制器、视图。</span><br><span class="line">    [self addChildViewController:self.pageViewController];</span><br><span class="line">    [self.view addSubview:self.pageViewController.view];</span><br><span class="line">    </span><br><span class="line">    [self.pageViewController didMoveToParentViewController:self];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - delegate</span><br><span class="line">// 手势导航开始前调用该方法。</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray&lt;UIViewController *&gt; *)pendingViewControllers &#123;</span><br><span class="line">    // 如果用户终止了滑动导航，transition将不能完成，页面也将保持不变。</span><br><span class="line">    ReadPageViewController *dataVC = (ReadPageViewController *)pendingViewControllers.firstObject;</span><br><span class="line">    if (dataVC) &#123;</span><br><span class="line">        self.nextIndex = dataVC.itemIndex;</span><br><span class="line">        // 输出滑动方向</span><br><span class="line">        if (self.currentIndex &lt; self.nextIndex) &#123;</span><br><span class="line">            NSLog(@&quot;Forward&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            NSLog(@&quot;Backward&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 手势导航结束后调用该方法。</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray&lt;UIViewController *&gt; *)previousViewControllers transitionCompleted:(BOOL)completed &#123;</span><br><span class="line">    // 使用completed参数区分成功导航和中止导航。</span><br><span class="line">    if (completed) &#123;</span><br><span class="line">        self.currentIndex = self.nextIndex;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (UIPageViewControllerSpineLocation)pageViewController:(UIPageViewController *)pageViewController spineLocationForInterfaceOrientation:(UIInterfaceOrientation)orientation &#123;</span><br><span class="line">    return UIPageViewControllerSpineLocationMin;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - Set</span><br><span class="line">// 初始化model</span><br><span class="line">- (ReadModel *)model &#123;</span><br><span class="line">    if (!_model) &#123;</span><br><span class="line">        _model = [[ReadModel alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    return _model;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>至此，一个很粗糙的文本翻页效果展示出来了。</p>
+<p>如图：</p>
+<p><img src="/2019/09/25/bookReader-02/book2_pageVC_3.gif" style="width:200px"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/20/bookReader/" rel="next" title="小说阅读器（一）—— 文本绘制">
+                <i class="fa fa-chevron-left"></i> 小说阅读器（一）—— 文本绘制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/27/bookReader-03/" rel="prev" title="小说阅读器（三）-使用coreText对长文本进行分页">
+                小说阅读器（三）-使用coreText对长文本进行分页 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#介绍："><span class="nav-number">1.</span> <span class="nav-text">介绍：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#使用："><span class="nav-number">2.</span> <span class="nav-text">使用：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

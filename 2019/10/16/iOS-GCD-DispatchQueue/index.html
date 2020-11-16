@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.简介​    iOS和Mac OS传统的并发编程模型是线程，不过线程模型伸缩性不强，而且编写正确的线程代码也不容易。Mac OS和iOS采取“异步设计方式”来解决并发的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS并发编程指南">
+<meta property="og:url" content="http://langg.top/2019/10/16/iOS-GCD-DispatchQueue/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="1.简介​    iOS和Mac OS传统的并发编程模型是线程，不过线程模型伸缩性不强，而且编写正确的线程代码也不容易。Mac OS和iOS采取“异步设计方式”来解决并发的问题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-25T03:07:56.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS并发编程指南">
+<meta name="twitter:description" content="1.简介​    iOS和Mac OS传统的并发编程模型是线程，不过线程模型伸缩性不强，而且编写正确的线程代码也不容易。Mac OS和iOS采取“异步设计方式”来解决并发的问题。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/10/16/iOS-GCD-DispatchQueue/"/>
+
+
+
+
+
+  <title>iOS并发编程指南 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/10/16/iOS-GCD-DispatchQueue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS并发编程指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-16T14:03:28+08:00">
+                2019-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>​    iOS和Mac OS传统的并发编程模型是线程，不过线程模型伸缩性不强，而且编写正确的线程代码也不容易。Mac OS和iOS采取“异步设计方式”来解决并发的问题。</p>
+<a id="more"></a>
+<p>引入的异步技术有两个：</p>
+<ul>
+<li><strong>Grand Central Dispatch(GCD):</strong> 系统管理线程，不需要编写线程代码，只需要定义想要执行的任务，然后添加到适当的dispatch queue。GCD会负责创建线程和调度你的任务。系统直接提供线程管理，比应用实现更加高效。</li>
+<li><strong>Operation Queue:</strong> Objective-C对象，类似于dispatch queue。你定义想要执行的任务，并添加任务到operation queue，后者负责调度和执行这些任务。和GCD一样，Operation Queue也管理了线程，更加高效。</li>
+</ul>
+<h4 id="1-1Dispatch-Queue"><a href="#1-1Dispatch-Queue" class="headerlink" title="1.1Dispatch Queue"></a>1.1Dispatch Queue</h4><p>​    基于C的执行自定义任务机制。dispatch queue按<strong>先进先出</strong>的顺序，串行或并发地执行任务。<code>serial dispatch queue</code>一次只能执行一个任务，直到当前任务完成才开始出列并启动下一个任务，而<code>concurrent dispatch queue</code>则尽可能多地启动任务并发执行。</p>
+<p>优点：</p>
+<ul>
+<li>直观而简单的编程接口</li>
+<li>提供自动和整体的线程池管理</li>
+<li>提供汇编级调优的速度</li>
+<li>更加高效的使用内存</li>
+<li>不会trap内核under load</li>
+<li>异步分派任务到dispatch queue不会导致queue死锁</li>
+<li>伸缩性强</li>
+<li>serial dispatch queue 比锁和其他同步原语更加高效</li>
+</ul>
+<h4 id="1-2-Dispatch-Sources"><a href="#1-2-Dispatch-Sources" class="headerlink" title="1.2 Dispatch Sources"></a>1.2 Dispatch Sources</h4><p>​    Dispatch Sources 是基于C的系统事件异步处理机制。一个Dispatch Source封装了一个特定类型的系统事件，当事件发生时提交一个特定的block对象或函数到dispatch queue。你可以使用Dispatch Sources监控以下类型的系统事件：</p>
+<ul>
+<li>定时器</li>
+<li>信号处理器</li>
+<li>描述符相关的事件</li>
+<li>进程相关的事件</li>
+<li>Mach port事件</li>
+<li>你触发的自定义事件</li>
+</ul>
+<h4 id="2-Operation-Queues"><a href="#2-Operation-Queues" class="headerlink" title="2.Operation Queues"></a>2.Operation Queues</h4><p>​    基于Objective-C，因此基于Cocoa的应用通常会使用Operation Queues</p>
+<h5 id="2-1-Operation-Objects"><a href="#2-1-Operation-Objects" class="headerlink" title="2.1 Operation Objects"></a>2.1 Operation Objects</h5><p>​    operation object是NSOperation类的实例，封装了应用需要执行的任务，和执行任务所需的数据。NSOperation本身是抽象基类，我们必须实现子类。Foundation framework提供了两个具体子类，你可以直接使用：</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NSInvocationOperation</td>
+<td style="text-align:left">可以直接使用的类，基于应用的一个对象和selector来创建operation object。如果你已经有现有的方法来执行需要的任务，就可以使用这个类</td>
+</tr>
+<tr>
+<td>NSBlockOperation</td>
+<td style="text-align:left">可以直接使用的类，用来并发的执行一个或多个block对象。operation object使用“组”的语义来执行多个block对象，所有相关的block都执行完成之后，operation object才算完成。</td>
+</tr>
+<tr>
+<td>NSOperation</td>
+<td style="text-align:left">基类，用来自定义子类operation object。继承NSOperation可以完全控制operation object的实现，包括修改操作执行和状态报告的方式。</td>
+</tr>
+</tbody>
+</table>
+<p>所有operation objects都支持以下关键特性：</p>
+<ul>
+<li><ul>
+<li>支持建立基于图的operation objects依赖。可以阻止某个operation运行，直到它依赖的所有operation都已经完成。</li>
+<li>支持可选的completion block，在operation的主任务完成后调用。</li>
+<li>支持应用使用KVO通知来监控operation的执行状态。</li>
+<li>支持operation优先级，从而影响相对的执行顺序</li>
+<li>支持取消，允许你终止正在执行的任务</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-2-创建一个NSInvocationOperation对象"><a href="#2-2-创建一个NSInvocationOperation对象" class="headerlink" title="2.2 创建一个NSInvocationOperation对象"></a>2.2 创建一个NSInvocationOperation对象</h5><pre><code>如果已经现有一个方法，需要并发地执行，就可以直接创建NSInvocationOperation对象，而不需要自己继承NSOperation。
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    // 可以传递一个 NSObject 给operation的操作方法</span><br><span class="line">    NSDictionary *dic = [NSDictionary dictionaryWithObject:@&quot;value&quot; forKey:@&quot;key1&quot;];</span><br><span class="line">    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(operationSelector:) object:dic];</span><br><span class="line">    </span><br><span class="line">    NSLog(@&quot;start before&quot;);</span><br><span class="line">    [op start];</span><br><span class="line">    NSLog(@&quot;start after&quot;);</span><br><span class="line">&#125;</span><br><span class="line">//从输出结果可以看出，执行的操作方法与调用start的方法在同一个线程，并且是同步执行的。</span><br><span class="line">- (void)operationSelector:(NSDictionary *)dic&#123;</span><br><span class="line">    //接收进来的dict</span><br><span class="line">    NSLog(@&quot;dictValue = %@&quot;,[dic objectForKey:@&quot;key1&quot;]);</span><br><span class="line">    //加个睡眠模仿耗时操作</span><br><span class="line">    sleep(10);</span><br><span class="line">    NSLog(@&quot;currentThread = %@&quot;,[NSThread currentThread]);</span><br><span class="line">    NSLog(@&quot;mainThread = %@&quot;,[NSThread mainThread]);</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> 2019-10-16 15:13:08.384141+0800 并发编程指南[9626:1073654] start before</span><br><span class="line"> 2019-10-16 15:13:08.384296+0800 并发编程指南[9626:1073654] dictValue = value</span><br><span class="line"> 2019-10-16 15:13:18.384969+0800 并发编程指南[9626:1073654] currentThread = &lt;NSThread: 0x600002666240&gt;&#123;number = 1, name = main&#125;</span><br><span class="line"> 2019-10-16 15:13:18.385416+0800 并发编程指南[9626:1073654] mainThread = &lt;NSThread: 0x600002666240&gt;&#123;number = 1, name = main&#125;</span><br><span class="line"> 2019-10-16 15:13:18.385716+0800 并发编程指南[9626:1073654] start after</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<h5 id="2-3-创建一个NSBlockOperation对象"><a href="#2-3-创建一个NSBlockOperation对象" class="headerlink" title="2.3 创建一个NSBlockOperation对象"></a>2.3 创建一个NSBlockOperation对象</h5><p>​    NSBlockOperation对象用于封装一个或多个block对象，一般创建时会添加至少一个block，然后再根据需要添加更多的block。当NSBlockOperation对象执行时，会把所有block提交到默认优先级的并发dispatch queue。然后NSBlockOperation对象等待所有block完成执行，最后标记自己已完成。因此可以使用block operation来跟踪一组执行中的block，有点类似于thread join等待多个线程的结果。区别在于block operation本身也运行在一个单独的线程，应用的其他线程在等待block operation完成时可以继续工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">           sleep(10);  // 加个睡眠模仿耗时操作</span><br><span class="line">           NSLog(@&quot;currentThread = %@&quot;, [NSThread currentThread]);</span><br><span class="line">           NSLog(@&quot;mainThread = %@&quot;, [NSThread mainThread]);</span><br><span class="line">    &#125;];</span><br><span class="line">    NSLog(@&quot;start before&quot;);</span><br><span class="line">    [op start];</span><br><span class="line">    NSLog(@&quot;start after&quot;);</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> 2019-10-16 15:21:01.332159+0800 并发编程指南[9660:1078779] start before</span><br><span class="line"> 2019-10-16 15:21:11.333268+0800 并发编程指南[9660:1078779] currentThread = &lt;NSThread: 0x600003e12140&gt;&#123;number = 1, name = main&#125;</span><br><span class="line"> 2019-10-16 15:21:11.334047+0800 并发编程指南[9660:1078779] mainThread = &lt;NSThread: 0x600003e12140&gt;&#123;number = 1, name = main&#125;</span><br><span class="line"> 2019-10-16 15:21:11.334235+0800 并发编程指南[9660:1078779] start after</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p>可以看出，NSBlockOperation 与 NSInvocationOperation 的结果是一样的，Block 中的操作与<code>start</code>方法在<strong>同一个线程</strong>执行，并且是<strong>同步执行</strong>的。</p>
+<p>NSBlockOperation 还提供了这个方法：<code>- (void)addExecutionBlock:(void (^)(void))block;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^&#123;</span><br><span class="line">        NSLog(@&quot;BlockOperation 1 begin&quot;);</span><br><span class="line">        sleep(5);  // 加个睡眠模仿耗时操作</span><br><span class="line">        NSLog(@&quot;BlockOperation 1 currentThread = %@&quot;, [NSThread currentThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 1 mainThread    = %@&quot;, [NSThread mainThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 1 end&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    [op addExecutionBlock:^&#123;</span><br><span class="line">        NSLog(@&quot;BlockOperation 2 begin&quot;);</span><br><span class="line">        sleep(5);</span><br><span class="line">        NSLog(@&quot;BlockOperation 2 currentThread = %@&quot;, [NSThread currentThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 2 mainThread    = %@&quot;, [NSThread mainThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 2 end&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    [op addExecutionBlock:^&#123;</span><br><span class="line">        NSLog(@&quot;BlockOperation 3 begin&quot;);</span><br><span class="line">        sleep(5);</span><br><span class="line">        NSLog(@&quot;BlockOperation 3 currentThread = %@&quot;, [NSThread currentThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 3 mainThread    = %@&quot;, [NSThread mainThread]);</span><br><span class="line">        NSLog(@&quot;BlockOperation 3 end&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    NSLog(@&quot;start before&quot;);</span><br><span class="line">    [op start];</span><br><span class="line">    NSLog(@&quot;start after&quot;);</span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line">并发编程指南[9687:1080975] start before</span><br><span class="line">并发编程指南[9687:1081019] BlockOperation 1 begin</span><br><span class="line">并发编程指南[9687:1080975] BlockOperation 3 begin</span><br><span class="line">并发编程指南[9687:1081018] BlockOperation 2 begin</span><br><span class="line">并发编程指南[9687:1081018] BlockOperation 2 currentThread = &lt;NSThread: 0x6000000e2bc0&gt;&#123;number = 4, name = (null)&#125;</span><br><span class="line">并发编程指南[9687:1081019] BlockOperation 1 currentThread = &lt;NSThread: 0x6000000e3140&gt;&#123;number = 5, name = (null)&#125;</span><br><span class="line">并发编程指南[9687:1080975] BlockOperation 3 currentThread = &lt;NSThread: 0x6000000b2240&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">并发编程指南[9687:1081018] BlockOperation 2 mainThread    = &lt;NSThread: 0x6000000b2240&gt;&#123;number = 1, name = (null)&#125;</span><br><span class="line">并发编程指南[9687:1081019] BlockOperation 1 mainThread    = &lt;NSThread: 0x6000000b2240&gt;&#123;number = 1, name = (null)&#125;</span><br><span class="line">并发编程指南[9687:1080975] BlockOperation 3 mainThread    = &lt;NSThread: 0x6000000b2240&gt;&#123;number = 1, name = main&#125;</span><br><span class="line">并发编程指南[9687:1081018] BlockOperation 2 end</span><br><span class="line">并发编程指南[9687:1081019] BlockOperation 1 end</span><br><span class="line">并发编程指南[9687:1080975] BlockOperation 3 end</span><br><span class="line">并发编程指南[9687:1080975] start after</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p> 看到 Block2 和 Block3 中的 currentThread 并不是主线程，而且其中的操作也是异步执行的。 可以看出如果是通过addExecutionBlock添加的操作则是多线程异步操作。</p>
+<h5 id="2-4-自定义Operation对象"><a href="#2-4-自定义Operation对象" class="headerlink" title="2.4 自定义Operation对象"></a>2.4 自定义Operation对象</h5><p>​    如果block operation和invocation operation对象不符合应用的需求，你可以直接继承NSOperation，并添加任何你想要的行为。NSOperation类提供通用的子类继承点，而且实现了许多重要的基础设施来处理依赖和KVO通知，继承所需的工作量主要取决于你要实现非并发还是并发的operation。</p>
+<p>执行主任务：每个operation对象至少需要实现以下方法：</p>
+<ul>
+<li>自定义initialization方法：初始化，将operation对象设置为已知状态</li>
+<li>自定义main方法：执行你的任务</li>
+</ul>
+<p>你也可以选择性实现以下方法：</p>
+<ul>
+<li>main方法中需要调用的其他自定义方法</li>
+<li>accessor方法：设置和访问operation对象的数据</li>
+<li>dealloc方法：清理operation对象分配的所有内存</li>
+<li>NSCoding协议的方法：允许operation对象archive和unarchive</li>
+</ul>
+<p> <strong><em>自定义非并发NSOperation</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line">typedef void(^LDownloadReponse)(UIImage *image);</span><br><span class="line"></span><br><span class="line">@interface DownloadOperation : NSOperation</span><br><span class="line">  </span><br><span class="line">@property (nonatomic, copy) NSString *url;</span><br><span class="line">@property (nonatomic, copy) LDownloadReponse responseBlock;</span><br><span class="line">- (instancetype)initWithUrl:(NSString *)url completion:(LDownloadReponse)completion;</span><br><span class="line">@end</span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line">  </span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;DownloadOperation.h&quot;</span><br><span class="line"></span><br><span class="line">@interface DownloadOperation()&#123;</span><br><span class="line">    </span><br><span class="line">    BOOL _isFinished;</span><br><span class="line">    BOOL _isExecuting;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation DownloadOperation</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithUrl:(NSString *)url completion:(LDownloadReponse)completion&#123;</span><br><span class="line">    if (self = [super init]) &#123;</span><br><span class="line">        self.url = url;</span><br><span class="line">        self.responseBlock = completion;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 必须重写这个主方法</span><br><span class="line">- (void)main&#123;</span><br><span class="line">    // 新建一个自动释放池，如果是异步执行操作，那么将无法访问到主线程的自动释放池</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        // 提供一个变量标识，来表示我们需要执行的操作是否完成了，当然，没开始执行之前，为NO</span><br><span class="line">       BOOL taskIsFinished = NO;</span><br><span class="line">       UIImage *image = nil;</span><br><span class="line">       </span><br><span class="line">       // while 保证：只有当没有执行完成和没有被取消，才执行我们自定义的相应操作</span><br><span class="line">       while (taskIsFinished == NO &amp;&amp; [self isCancelled] == NO)&#123;</span><br><span class="line">           // 获取图片数据</span><br><span class="line">           NSURL *url = [NSURL URLWithString:self.url];</span><br><span class="line">           NSData *imageData = [NSData dataWithContentsOfURL:url];</span><br><span class="line">           image = [UIImage imageWithData:imageData];</span><br><span class="line">           NSLog(@&quot;Current Thread = %@&quot;, [NSThread currentThread]);</span><br><span class="line">           </span><br><span class="line">           // 这里，设置我们相应的操作都已经完成，后面就是要通知KVO我们的操作完成了。</span><br><span class="line">           taskIsFinished = YES;</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">       // KVO 生成通知，告诉其他线程，该operation 执行完了</span><br><span class="line">       [self willChangeValueForKey:@&quot;isFinished&quot;];</span><br><span class="line">       [self willChangeValueForKey:@&quot;isExecuting&quot;];</span><br><span class="line">       _isFinished = YES;</span><br><span class="line">       _isExecuting = NO;</span><br><span class="line">       [self didChangeValueForKey:@&quot;isFinished&quot;];</span><br><span class="line">       [self didChangeValueForKey:@&quot;isExecuting&quot;];</span><br><span class="line">       </span><br><span class="line">       if (self.responseBlock) &#123;</span><br><span class="line">           dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">               self.responseBlock(image);</span><br><span class="line">           &#125;);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)start &#123;</span><br><span class="line">    // 如果我们取消了在开始之前，我们就立即返回并生成所需的KVO通知</span><br><span class="line">    if ([self isCancelled])&#123;</span><br><span class="line">        // 我们取消了该 operation，那么就要告诉KVO，该operation已经执行完成（isFinished）</span><br><span class="line">        // 这样，调用的队列（或者线程）会继续执行。</span><br><span class="line">        [self willChangeValueForKey:@&quot;isFinished&quot;];</span><br><span class="line">        _isFinished = NO;</span><br><span class="line">        [self didChangeValueForKey:@&quot;isFinished&quot;];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 没有取消，那就要告诉KVO，该队列开始执行了（isExecuting）！那么，就会调用main方法，进行同步执行。</span><br><span class="line">        [self willChangeValueForKey:@&quot;isExecuting&quot;];</span><br><span class="line">        _isExecuting = YES;</span><br><span class="line">        [NSThread detachNewThreadSelector:@selector(main) toTarget:self withObject:nil];</span><br><span class="line">        [self didChangeValueForKey:@&quot;isExecuting&quot;];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)isExecuting &#123;</span><br><span class="line">    return _isExecuting;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)isFinished &#123;</span><br><span class="line">    return _isFinished;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>外部调用结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">   // queue方式：</span><br><span class="line">    DownloadOperation *op1 = [[DownloadOperation alloc] initWithUrl:@&quot;http://pic.netbian.com/uploads/allimg/191015/151019-1571123419655b.jpg&quot; completion:^(UIImage * _Nonnull image) &#123;</span><br><span class="line">        NSLog(@&quot;op1完成&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    DownloadOperation *op2 = [[DownloadOperation alloc] initWithUrl:@&quot;http://pic.netbian.com/uploads/allimg/191015/231304-1571152384273d.jpg&quot; completion:^(UIImage * _Nonnull image) &#123;</span><br><span class="line">        NSLog(@&quot;op2完成&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    DownloadOperation *op3 = [[DownloadOperation alloc] initWithUrl:@&quot;http://pic.netbian.com/uploads/allimg/191015/223813-157115029321d9.jpg&quot; completion:^(UIImage * _Nonnull image) &#123;</span><br><span class="line">        NSLog(@&quot;op3完成&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    NSOperationQueue *queue = [[NSOperationQueue alloc] init];</span><br><span class="line">    [queue addOperation:op1];</span><br><span class="line">    [queue addOperation:op2];</span><br><span class="line">    [queue addOperation:op3];</span><br><span class="line">    [queue setMaxConcurrentOperationCount:3];//设置操作的NSBlockOperation多少.</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> 并发编程指南[9884:1112140] Current Thread = &lt;NSThread: 0x600000538640&gt;&#123;number = 5, name = (null)&#125;</span><br><span class="line"> 并发编程指南[9884:1111998] op1完成</span><br><span class="line"> 并发编程指南[9884:1112142] Current Thread = &lt;NSThread: 0x60000050e9c0&gt;&#123;number = 7, name = (null)&#125;</span><br><span class="line"> 并发编程指南[9884:1111998] op3完成</span><br><span class="line"> 并发编程指南[9884:1112141] Current Thread = &lt;NSThread: 0x600000538680&gt;&#123;number = 6, name = (null)&#125;</span><br><span class="line"> 并发编程指南[9884:1111998] op2完成</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">//手动方式</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    DownloadOperation *op = [[DownloadOperation alloc] initWithUrl:@&quot;http://pic.netbian.com/uploads/allimg/191015/231304-1571152384273d.jpg&quot; completion:^(UIImage * _Nonnull image) &#123;</span><br><span class="line">        NSLog(@&quot;完成&quot;);</span><br><span class="line">    &#125;];</span><br><span class="line">    [op start];</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line">/*</span><br><span class="line"> 2019-10-16 16:19:22.905000+0800 并发编程指南[9913:1116046] Current Thread = &lt;NSThread: 0x6000033d03c0&gt;&#123;number = 6, name = (null)&#125;</span><br><span class="line"> 2019-10-16 16:19:22.905283+0800 并发编程指南[9913:1115970] 完成</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p><strong><em>自定义并发NSOperation</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;DownloadOperation.h&quot;</span><br><span class="line"></span><br><span class="line">@interface DownloadOperation () &#123;</span><br><span class="line">@private BOOL _isFinished;</span><br><span class="line">@private BOOL _isExecuting;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation DownloadOperation</span><br><span class="line"></span><br><span class="line">- (instancetype)initWithUrl:(NSString *)url completion:(HYBDownloadReponse)completion&#123;</span><br><span class="line">    if (self = [super init]) &#123;</span><br><span class="line">        self.url = url;</span><br><span class="line">        self.responseBlock = completion;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line">// 必须重写这个主方法</span><br><span class="line">- (void)main &#123;</span><br><span class="line">    // 新建一个自动释放池，如果是异步执行操作，那么将无法访问到主线程的自动释放池</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        UIImage *image = nil;</span><br><span class="line">        if (!self.isCancelled) &#123;</span><br><span class="line">            // 获取图片数据</span><br><span class="line">            NSURL *url = [NSURL URLWithString:self.url];</span><br><span class="line">            NSData *imageData = [NSData dataWithContentsOfURL:url];</span><br><span class="line">            image = [UIImage imageWithData:imageData];</span><br><span class="line">        &#125;</span><br><span class="line">        NSLog(@&quot;currentThread: %@&quot;, [NSThread currentThread]);</span><br><span class="line">        // 被取消，也可能发生在转换的地方</span><br><span class="line">        if (self.isCancelled) &#123;</span><br><span class="line">            image = nil;</span><br><span class="line">        &#125;</span><br><span class="line">        if (![self isCancelled] &amp;&amp; self.responseBlock) &#123;</span><br><span class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">                self.responseBlock(image);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 与自定义同步NSOperation不同的是，必须要实现下面的方法</span><br><span class="line">#if __IPHONE_OS_VERSION_MAX_ALLOWED &lt; __IPHONE_7_0</span><br><span class="line">- (BOOL)isConcurrent &#123;</span><br><span class="line">	return YES;</span><br><span class="line">&#125;</span><br><span class="line">#else</span><br><span class="line">- (BOOL)isAsynchronous &#123;</span><br><span class="line">	return YES;</span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/11/bookReader-04/" rel="next" title="小说阅读器（四）- 小说翻页">
+                <i class="fa fa-chevron-left"></i> 小说阅读器（四）- 小说翻页
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/17/Effective-OC/" rel="prev" title="高效iOS方法">
+                高效iOS方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-简介"><span class="nav-number">1.</span> <span class="nav-text">1.简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1Dispatch-Queue"><span class="nav-number">1.1.</span> <span class="nav-text">1.1Dispatch Queue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-Dispatch-Sources"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Dispatch Sources</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Operation-Queues"><span class="nav-number">1.3.</span> <span class="nav-text">2.Operation Queues</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-Operation-Objects"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 Operation Objects</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-创建一个NSInvocationOperation对象"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 创建一个NSInvocationOperation对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-创建一个NSBlockOperation对象"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 创建一个NSBlockOperation对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-自定义Operation对象"><span class="nav-number">1.3.4.</span> <span class="nav-text">2.4 自定义Operation对象</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

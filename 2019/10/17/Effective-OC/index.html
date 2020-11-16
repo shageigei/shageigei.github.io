@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介：编写高质量iOS与OS X代码的有效方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高效iOS方法">
+<meta property="og:url" content="http://langg.top/2019/10/17/Effective-OC/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="简介：编写高质量iOS与OS X代码的有效方法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-21T09:26:43.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高效iOS方法">
+<meta name="twitter:description" content="简介：编写高质量iOS与OS X代码的有效方法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/10/17/Effective-OC/"/>
+
+
+
+
+
+  <title>高效iOS方法 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/10/17/Effective-OC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">高效iOS方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-17T11:34:06+08:00">
+                2019-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h4><p>编写高质量iOS与OS X代码的有效方法。</p>
+<a id="more"></a>
+<h4 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h4><h5 id="第1条：在类的头文件中尽量少引入其他头文件"><a href="#第1条：在类的头文件中尽量少引入其他头文件" class="headerlink" title="第1条：在类的头文件中尽量少引入其他头文件"></a>第1条：在类的头文件中尽量少引入其他头文件</h5><p>将引入头文件的时机尽量延后，只在确有需要时才引入，这样就可以减少类的使用者所需引入的头文件数量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//.h 文件</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line"></span><br><span class="line">@class DownloadOperation;//向前声明</span><br><span class="line">@interface ViewController : UIViewController</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) DownloadOperation *d;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">//.m 文件</span><br><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &quot;DownloadOperation.h&quot;</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h5 id="第2条：多用字面量语法，少用与之等价的方法"><a href="#第2条：多用字面量语法，少用与之等价的方法" class="headerlink" title="第2条：多用字面量语法，少用与之等价的方法"></a>第2条：多用字面量语法，少用与之等价的方法</h5><ul>
+<li>字面数值</li>
+</ul>
+<p>有时需要把整数、浮点数、布尔值封入Objective-C对象中。这种情况可以用NSNumber类，该类可处理多种类型的数值。若是不用字面量，那么久需要按下述方式创建实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSNumber *someNumber = [NSNumber numberWithInt:1];</span><br></pre></td></tr></table></figure>
+<p>上面这行代码创建一个数字，将其值设为整数1。然而使用字面量能令代码更为整洁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSNumber *someNumber = @1;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>字面量数组</li>
+</ul>
+<p>数组是常用的数据结构，如果不使用字面量语法，那么就要这样来创建数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSArray *animals = [NSArray arrayWithObjects:@&quot;cat&quot;,@&quot;dog&quot;,@&quot;mouse&quot;,@&quot;badger&quot;,nil];</span><br></pre></td></tr></table></figure>
+<p>而使用字面量语法来创建则是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSArray *animals = @[@&quot;cat&quot;,@&quot;dog&quot;,@&quot;mouse&quot;,@&quot;badger&quot;];</span><br></pre></td></tr></table></figure>
+<p>上面这个做法不仅简单，而且还利于操作数据，数组的常见操作就是取某个下标所对应的对象，这用字面量来做更为容易。如果不用字面量那就需要使用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *dog = [animals objectAtIndex:1];</span><br></pre></td></tr></table></figure>
+<p>若使用字面量，则是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *dog = animals[1];</span><br></pre></td></tr></table></figure>
+<p>这也叫做“取下标”操作。不过，用字面量语法创建数组时要注意，若数组元素对象中有nil，则会抛出异常，因为字面量语法实际上只有一种“语法糖”，其效果等于是先创建了一个数组，然后把方括号内的所有对象都加到这个数组中。</p>
+<p>问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">id object1 = ...</span><br><span class="line">id object2 = ...</span><br><span class="line">id object3 = ...</span><br><span class="line"></span><br><span class="line">NSArray *arrayA = [NSArray arrayWithObjects:object1,object2,object3, nil]</span><br><span class="line">NSArray *arrayB = @[object1,object2,object3];</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[14407:1525136] arrayA=(</span><br><span class="line">    1</span><br><span class="line">)</span><br><span class="line">[14407:1525136] *** Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;, reason: &apos;*** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]&apos;</span><br><span class="line">*** First throw call stack:</span><br><span class="line">(</span><br><span class="line">	0   CoreFoundation                      0x00007fff23baa1ee __exceptionPreprocess + 350</span><br><span class="line">	1   libobjc.A.dylib                     0x00007fff50864b20 objc_exception_throw + 48</span><br><span class="line">	2   CoreFoundation                      0x00007fff23c3cb71 _CFThrowFor</span><br></pre></td></tr></table></figure>
+<p>思考：</p>
+<p>​    如果object1与object3都指向了有效的Objective-C对象，而object2是nil，那么会出现什么情况呢？按字面量语法创建数组arrayB时会抛出异常。arrayA虽然能创建出来，但是其中却只含有object1一个对象，原因在于，“arrayWithObje：”方法会依次处理各个参数，直到发现nil为止，由于object2是nil，所以该方法会提前结束。</p>
+<p>​    这个微妙的差别表现，使用字面量语法更为安全。抛出异常令应用程序终止执行，这比创建好数组之后才发现元素个数少了要好。向数组中插入nil通常说明程序有错，而通过异常可以更快地发现这个错误。</p>
+<ul>
+<li>字面量字典</li>
+</ul>
+<p>跟数组一样，字典创建方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@&quot;123&quot;,@&quot;key1&quot;,@&quot;456&quot;,@&quot;key2&quot;,@&quot;789&quot;,@&quot;key3&quot;, nil];</span><br></pre></td></tr></table></figure>
+<p>其顺序是&lt;对象&gt;,&lt;键&gt;,&lt;对象&gt;,&lt;键&gt;    这种写法不容易读懂。用字面量语法就清晰多了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *dic2 = @&#123;@&quot;key1&quot;:@&quot;123&quot;,@&quot;key2&quot;:@&quot;456&quot;,@&quot;key3&quot;:@&quot;789&quot;&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种写法简明，键出现在对象之前，理解起来比较顺畅。</p>
+<p>字典取值也可以用字面量语法访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//普通方法</span><br><span class="line">NSString *key1 = [dic objectForKey:@&quot;key1&quot;];</span><br><span class="line">//字面量语法</span><br><span class="line">NSString *key1 = dic2[@&quot;key1&quot;];</span><br></pre></td></tr></table></figure>
+<h5 id="第3条：多用类型常量，少用-define预处理指令"><a href="#第3条：多用类型常量，少用-define预处理指令" class="headerlink" title="第3条：多用类型常量，少用#define预处理指令"></a>第3条：多用类型常量，少用#define预处理指令</h5><p>​    编写代码时经常要定义常量。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define ANIMATION_DURATION 0.3</span><br></pre></td></tr></table></figure>
+<p>上述预处理指令会把源代码中的ANIMATION_DURATION字符串替换为0.3。不过这样定义出来的常量没有类型信息。要想解决此方法，应该设法利用编译器的某些特性才对。有个办法比用预处理指令来定义常量更好，如下定义一个类型为NSTimeInterval的常量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static const NSTimeInterval kAnimationDuration = 0.3;</span><br></pre></td></tr></table></figure>
+<p>有时需要对外公开某个常量。比方说，你可能要在类代码中调用NSNotificationCenter以通知他人，派发通知时，需要使用字符串来表示此项通知的名称，而这个名字就可以声明为一个外界可见的常值变量。此类常量应这样定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">extern NSString *const EOCStringConstant;</span><br><span class="line"></span><br><span class="line">//.m文件</span><br><span class="line">NSString *const EOCStringSonstant = @&quot;VALUE&quot;;</span><br></pre></td></tr></table></figure>
+<p>这个常量在头文件中“声明”，且在实现文件中“定义”。注意const修饰符在常量类型中的位置，常量定义应从右至左解读，所以在本例中，EOCStringConstant就是“一个常量，这个常量是指针，指向NSString对象”。这与需求相符：我们不希望有人改变此指针常量，使其指向另一个NSString对象。</p>
+<h5 id="第4条：用枚举表示状态、选项、状态码"><a href="#第4条：用枚举表示状态、选项、状态码" class="headerlink" title="第4条：用枚举表示状态、选项、状态码"></a>第4条：用枚举表示状态、选项、状态码</h5><p>​    由于Objective-C基于C语言，所以C语言有的功能它都有。其中之一就是枚举类型：enum。枚举只是一种常量命令方式。某个对象所经历的各种状态就可以定义为一个简单的枚举集。比如说，可以用一下列枚举表示“套接字连接”的状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">enum EOCConnectionState &#123;</span><br><span class="line">  EOCConnectStateDisconnected,</span><br><span class="line">  EOCConnectStateConnecting,</span><br><span class="line">  EOCConnectStateConnected,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>由于每种状态都用一个便于理解的值来表示，所以这样写出来的代码更易读懂。编译器会为枚举分配一个独有的编号，从0开始，每个枚举递增1。实现枚举所用的数据类型取决于编译器，不过其二进制位（bit）的个数必须能完全表示下枚举编号才行。</p>
+<p>然而定义枚举变量的方式却不太简洁，要依据入校语法编写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enum EOCConnetionState state = EOCConnectionStateDisconnected;</span><br></pre></td></tr></table></figure>
+<p>若每次不用敲enum而只需写EOCConnectionState就好了，这样需加typedef关键字重新定义枚举类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">enum EOCConnectionState &#123;</span><br><span class="line">  EOCConnectStateDisconnected,</span><br><span class="line">  EOCConnectStateConnecting,</span><br><span class="line">  EOCConnectStateConnected,</span><br><span class="line">&#125;;</span><br><span class="line">typedef enum EOCConnectionState EOCConnectionState;</span><br></pre></td></tr></table></figure>
+<p>现在可以简写EOCConnectionState代替完整吃enum EOCConnectionState了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EOCConnectionState state = EOCConnectionStateDisconnected</span><br></pre></td></tr></table></figure>
+<h4 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h4><h5 id="第5条：理解“属性”"><a href="#第5条：理解“属性”" class="headerlink" title="第5条：理解“属性”"></a>第5条：理解“属性”</h5><p>​    属性是Objective-C的一项特性，用于封装对象中的数据。Objective-C对象通常会把其所需要的数据保存为各种实例变量。实例变量一般通过“存取方法”来访问</p>
+<ul>
+<li><p>属性特质</p>
+<p>使用属性时还有一个问题需要注意，就是其各种特质设定也会影响编译器所生成的存取方法。比如下面这个属性就指定了三项特质：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property (nonatomic, readwrite, copy) NSString *firstName;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>属性可以拥有的特质分为四类：</p>
+<p><strong><em>原子性</em></strong>：在默认情况下，由编译器所合成的方法会通过锁定机制确保其原子性。如果属性具备nonatomic特质，则不使用同步锁。请注意，尽管没有名为“atomic”的特质但是仍然可以再属性特质中写明这一点，编译器不会报错。若是自己定义存取方法，那么就应该遵从属性特质相符的原子性。</p>
+<p><strong><em>读/写权限</em></strong>：</p>
+<ul>
+<li>具备readwrite(读写)特质的属性拥有“获取方法”（getter）与“设置方法”（setter)，若该属性由@synthesize实现，则编译器会自动生成这两个方法。</li>
+<li>具备readonly(只读)特质的属性仅拥有获取方法，只有当该属性由@synthesize实现时，编译器才会为其合成获取方法。</li>
+</ul>
+<p><strong><em>内存管理语句</em></strong>：</p>
+<ul>
+<li><p>assign : “设置方法”只会执行针对“纯量类型”（如：CGFloat或NSInterger等）的简单赋值才做。</p>
+</li>
+<li><p>strong：此特性表明该属性定义了一种“拥有关系”。为这种属性设置新值时，设置方法会先保留新值，并释放旧值，然后再讲新值社会组上去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//ARC环境：</span><br><span class="line">- (void)setName:(NSString *)name &#123;</span><br><span class="line">    _name = name</span><br><span class="line">&#125;</span><br><span class="line">//MRC环境</span><br><span class="line">- (void)setName:(NSString *)name &#123;</span><br><span class="line">    if (_name != name) &#123;</span><br><span class="line">        [_name release];</span><br><span class="line">        _name = [name retain];//引用计数+1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>weak：此特质表明该属性定了一种“非拥有关系”。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同assign类似，然而在属性所指的对象遭到摧毁时，属性值也会清空。</p>
+</li>
+<li><p>unsafe_unretained : 此特质的语义和assign相同，但是它适用于“对象类型”，该特质表达一种“非拥有关系”。当目标对象遭到摧毁时，属性值不会自动清空（不安全，“unsafe”），这一点与weak有区别</p>
+</li>
+<li><p>copy：此特质所表达的所属关系与strong类似，然而设置方法并不保留新值，而是将其“拷贝”。当属性类型为NSString*时，经常用此特质来保护其封装性，因为传递给设置方法的新值有可能指向一个NSMutableString类的实例，这个类是NSString的子类，表示一种可以修改其值的字符串，此时若是不拷贝字符串，那么设置完属性后，字符串的值就可能会在对象不知情的情况下遭人更改。所以这时就要拷贝一份不可变的字符串，确保对象中的字符串值不会无意间变动，只要实现属性所用的对象是可变的，就应该在设置新属性时拷贝一份。</p>
+</li>
+</ul>
+<p><strong>方法名</strong></p>
+<p>可通过如下特质来指定存取方法的方法名：</p>
+<ul>
+<li><p>getter=<name>指定“获取方法”的方法名。如果某个属性是Boolean型，而你想为其获取方法加上“is”前缀，那么就可以用这个办法来指定，比如说，在UISwitch类中，表示“开关”是否打开的属性就是这样定义的：</name></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@property(nonatomic, getter=isOn) BOOL on;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>setter=<name>指定“设置方法”的方法名，这种用法不太常见</name></p>
+</li>
+</ul>
+<h5 id="第6条：在对象内部尽量直接访问实例变量"><a href="#第6条：在对象内部尽量直接访问实例变量" class="headerlink" title="第6条：在对象内部尽量直接访问实例变量"></a>第6条：在对象内部尽量直接访问实例变量</h5>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/16/iOS-GCD-DispatchQueue/" rel="next" title="iOS并发编程指南">
+                <i class="fa fa-chevron-left"></i> iOS并发编程指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/03/iOS试题汇总/" rel="prev" title="iOS试题汇总">
+                iOS试题汇总 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介："><span class="nav-number">1.</span> <span class="nav-text">简介：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一章"><span class="nav-number">2.</span> <span class="nav-text">第一章</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第1条：在类的头文件中尽量少引入其他头文件"><span class="nav-number">2.1.</span> <span class="nav-text">第1条：在类的头文件中尽量少引入其他头文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第2条：多用字面量语法，少用与之等价的方法"><span class="nav-number">2.2.</span> <span class="nav-text">第2条：多用字面量语法，少用与之等价的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第3条：多用类型常量，少用-define预处理指令"><span class="nav-number">2.3.</span> <span class="nav-text">第3条：多用类型常量，少用#define预处理指令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第4条：用枚举表示状态、选项、状态码"><span class="nav-number">2.4.</span> <span class="nav-text">第4条：用枚举表示状态、选项、状态码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二章"><span class="nav-number">3.</span> <span class="nav-text">第二章</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第5条：理解“属性”"><span class="nav-number">3.1.</span> <span class="nav-text">第5条：理解“属性”</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第6条：在对象内部尽量直接访问实例变量"><span class="nav-number">3.2.</span> <span class="nav-text">第6条：在对象内部尽量直接访问实例变量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.Certificates, Identifiers &amp;amp; Profiles中创建证书首先进入开发者账号后台，进入Certificates, Identifiers &amp;amp; Profiles 然后选择">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发者证书创建">
+<meta property="og:url" content="http://langg.top/2020/10/15/Cer-Create/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="1.Certificates, Identifiers &amp;amp; Profiles中创建证书首先进入开发者账号后台，进入Certificates, Identifiers &amp;amp; Profiles 然后选择">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-01.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-02.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-03.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-04.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-05.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-06.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-07.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-08.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-09.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-10.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-11.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-12.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-13.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-14.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-15.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-16.png">
+<meta property="og:image" content="http://langg.top/2020/10/15/Cer-Create/cer-17.png">
+<meta property="og:updated_time" content="2020-11-16T06:14:40.565Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS开发者证书创建">
+<meta name="twitter:description" content="1.Certificates, Identifiers &amp;amp; Profiles中创建证书首先进入开发者账号后台，进入Certificates, Identifiers &amp;amp; Profiles 然后选择">
+<meta name="twitter:image" content="http://langg.top/2020/10/15/Cer-Create/cer-01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2020/10/15/Cer-Create/"/>
+
+
+
+
+
+  <title>iOS开发者证书创建 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2020/10/15/Cer-Create/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS开发者证书创建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-15T09:12:04+08:00">
+                2020-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-Certificates-Identifiers-amp-Profiles中创建证书"><a href="#1-Certificates-Identifiers-amp-Profiles中创建证书" class="headerlink" title="1.Certificates, Identifiers &amp; Profiles中创建证书"></a>1.Certificates, Identifiers &amp; Profiles中创建证书</h2><p>首先进入开发者账号后台，进入Certificates, Identifiers &amp; Profiles 然后选择</p>
+<a id="more"></a>
+<p><img src="/2020/10/15/Cer-Create/cer-01.png" alt="cer-01"></p>
+<p>选择iOS Distribution上架到App Store</p>
+<p><img src="/2020/10/15/Cer-Create/cer-02.png" alt="cer-02" style="zoom:50%;"></p>
+<p>接下来需要在你的mac电脑上生成csr文件，上传到开发者后台</p>
+<p><img src="/2020/10/15/Cer-Create/cer-03.png" alt="cer-03" style="zoom:50%;"></p>
+<p>打开钥匙串，选择钥匙串访问，证书管理，从证书颁发机构请求证书，</p>
+<p><img src="/2020/10/15/Cer-Create/cer-04.png" alt="cer-04" style="zoom:50%;"></p>
+<p><img src="/2020/10/15/Cer-Create/cer-05.png" alt="cer-05" style="zoom:50%;"></p>
+<p>创建完CSR后,将此.certSigningRequest存储到磁盘上，创建完成的csr文件为下述样子</p>
+<p><img src="/2020/10/15/Cer-Create/cer-06.png" alt="cer-06" style="zoom:50%;"></p>
+<p>接着我们返回开发者后台上传上述创建的CSR文件，点击继续，则创建成功证书了，创建完成后的证书为下述样子</p>
+<p><img src="/2020/10/15/Cer-Create/cer-07.png" alt="cer-07" style="zoom:50%;"></p>
+<p>下载此证书后，双击此证书，可以在钥匙串中看到这个证书，如果需要给其他人用，可以导出p12文件。</p>
+<p>此时，证书已经生成完成，</p>
+<h2 id="2-申请app-ID"><a href="#2-申请app-ID" class="headerlink" title="2.申请app ID"></a>2.申请app ID</h2><p>选择Identifiers，点击创建appid</p>
+<p><img src="/2020/10/15/Cer-Create/cer-08.png" alt="cer-08" style="zoom:50%;"></p>
+<p>选择app IDs</p>
+<p><img src="/2020/10/15/Cer-Create/cer-09.png" alt="cer-09" style="zoom:50%;"></p>
+<p>如果要发布app则选择app，如果要发布app clip,则选择app clip，这个地方我们选择app,点击继续</p>
+<p><img src="/2020/10/15/Cer-Create/cer-10.png" alt="cer-10" style="zoom:50%;"></p>
+<p>添加你开发项目的bundle id和描述</p>
+<p><img src="/2020/10/15/Cer-Create/cer-11.png" alt="cer-11" style="zoom:50%;"></p>
+<p>创建成功后接着申请描述证书,device这里就不说，这个只需要把你手机的UUID填入进去就可以了</p>
+<h2 id="3-申请描述文件"><a href="#3-申请描述文件" class="headerlink" title="3.申请描述文件"></a>3.申请描述文件</h2><p>选择Profiles，点击创建描述文件</p>
+<p><img src="/2020/10/15/Cer-Create/cer-12.png" alt="cer-12" style="zoom:50%;"></p>
+<p>点击选择生产环境App Store,点击继续</p>
+<p><img src="/2020/10/15/Cer-Create/cer-13.png" alt="cer-13" style="zoom:50%;"></p>
+<p>选择上面创建的appid</p>
+<p><img src="/2020/10/15/Cer-Create/cer-14.png" alt="cer-14" style="zoom:50%;">点击继续 ,选择上述创建的证书</p>
+<p><img src="/2020/10/15/Cer-Create/cer-15.png" alt="cer-15" style="zoom:50%;"></p>
+<p>点击继续，输入描述证书名称，这个可以随便写，一般就写项目名称+正式或测试标记一下</p>
+<p><img src="/2020/10/15/Cer-Create/cer-16.png" alt="cer-16" style="zoom:50%;"></p>
+<p>此时就创建完成。下载描述文件，双击描述文件，xcode就可以查看到这个描述文件了。</p>
+<h2 id="4-推送证书"><a href="#4-推送证书" class="headerlink" title="4.推送证书"></a>4.推送证书</h2><p>​    <img src="/2020/10/15/Cer-Create/cer-17.png" alt="cer-17" style="zoom:50%;"></p>
+<p>选择生产环境的推送证书。点击创建，选择对应的appid，点击继续，上传上述创建的CSR文件,创建成功后下载，双击后钥匙串可以查看到该推送证书，在钥匙串中导出p12文件，到时可以上传到推送后台，推送使用。</p>
+<p>至此，APP的证书创建完成。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/03/iOS试题汇总/" rel="next" title="iOS试题汇总">
+                <i class="fa fa-chevron-left"></i> iOS试题汇总
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Certificates-Identifiers-amp-Profiles中创建证书"><span class="nav-number">1.</span> <span class="nav-text">1.Certificates, Identifiers &amp; Profiles中创建证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-申请app-ID"><span class="nav-number">2.</span> <span class="nav-text">2.申请app ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-申请描述文件"><span class="nav-number">3.</span> <span class="nav-text">3.申请描述文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-推送证书"><span class="nav-number">4.</span> <span class="nav-text">4.推送证书</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

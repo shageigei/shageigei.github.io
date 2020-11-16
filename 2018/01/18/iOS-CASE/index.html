@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="iOS一些小操作1.返回字符串所占用的size1234567-(CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize  content:(NSString *)string&amp;#123;    NSDictionary *attrs = @&amp;#123;NSFontAttributeName : font&amp;#125;;      retu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS一些小知识点">
+<meta property="og:url" content="http://langg.top/2018/01/18/iOS-CASE/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="iOS一些小操作1.返回字符串所占用的size1234567-(CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize  content:(NSString *)string&amp;#123;    NSDictionary *attrs = @&amp;#123;NSFontAttributeName : font&amp;#125;;      retu">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-18T07:03:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS一些小知识点">
+<meta name="twitter:description" content="iOS一些小操作1.返回字符串所占用的size1234567-(CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize  content:(NSString *)string&amp;#123;    NSDictionary *attrs = @&amp;#123;NSFontAttributeName : font&amp;#125;;      retu">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2018/01/18/iOS-CASE/"/>
+
+
+
+
+
+  <title>iOS一些小知识点 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2018/01/18/iOS-CASE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS一些小知识点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T14:52:37+08:00">
+                2018-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="iOS一些小操作"><a href="#iOS一些小操作" class="headerlink" title="iOS一些小操作"></a>iOS一些小操作</h1><h5 id="1-返回字符串所占用的size"><a href="#1-返回字符串所占用的size" class="headerlink" title="1.返回字符串所占用的size"></a>1.返回字符串所占用的size</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-(CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize  content:(NSString *)string</span><br><span class="line"></span><br><span class="line">&#123;    NSDictionary *attrs = @&#123;NSFontAttributeName : font&#125;;     </span><br><span class="line"></span><br><span class="line"> return [string boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;  </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h5 id="2-tableView自动滑到某一行"><a href="#2-tableView自动滑到某一行" class="headerlink" title="2.tableView自动滑到某一行"></a>2.tableView自动滑到某一行</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSIndexPath *scrollIndexPath = [NSIndexPath indexPathForRow:10 inSection:0];  </span><br><span class="line">[[self tableView] scrollToRowAtIndexPath:scrollIndexPath  </span><br><span class="line">        atScrollPosition:UITableViewScrollPositionTop animated:YES];</span><br></pre></td></tr></table></figure>
+<h5 id="3-tableView刷新到某个分区或行"><a href="#3-tableView刷新到某个分区或行" class="headerlink" title="3.tableView刷新到某个分区或行"></a>3.tableView刷新到某个分区或行</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:2];      </span><br><span class="line">[tableview reloadSections:indexSet withRowAnimation:UITableViewRowAnimationAutomatic];      </span><br><span class="line">//一个cell刷新      </span><br><span class="line">NSIndexPath *indexPath=[NSIndexPath indexPathForRow:3 inSection:0];      </span><br><span class="line">[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];</span><br></pre></td></tr></table></figure>
+<h5 id="4-读取plist文件"><a href="#4-读取plist文件" class="headerlink" title="4.读取plist文件"></a>4.读取plist文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSString *plistPath = [[NSBundle mainBundle] pathForResource:@&quot;plistdemo&quot; ofType:@&quot;plist&quot;];    </span><br><span class="line">   NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];</span><br></pre></td></tr></table></figure>
+<h5 id="5-关键字高亮"><a href="#5-关键字高亮" class="headerlink" title="5.关键字高亮"></a>5.关键字高亮</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">label.text = [NSString stringWithFormat:@&quot; 高亮字体:%@&quot;,home.title];  </span><br><span class="line">  </span><br><span class="line">NSString *str = [NSString stringWithFormat:@&quot; 高亮字体:%@&quot;,home.title];  </span><br><span class="line">  </span><br><span class="line">NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc]initWithString:str];  </span><br><span class="line">  </span><br><span class="line">NSRange range = [str rangeOfString:@&quot;高亮字体:&quot;];  </span><br><span class="line">  </span><br><span class="line">[titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor orangeColor] range:range];  </span><br><span class="line">  </span><br><span class="line">[label setAttributedText:titleStr];</span><br></pre></td></tr></table></figure>
+<h5 id="6-去掉字符串中的空格"><a href="#6-去掉字符串中的空格" class="headerlink" title="6.去掉字符串中的空格"></a>6.去掉字符串中的空格</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSString *str = @&quot;dhak d sh akdl &quot;;  </span><br><span class="line">NSString *strUrl = [str stringByReplacingOccurrencesOfString:@&quot; &quot; withString:@&quot;&quot;];</span><br></pre></td></tr></table></figure>
+<h5 id="7-UIImage添加生成圆角图片"><a href="#7-UIImage添加生成圆角图片" class="headerlink" title="7.UIImage添加生成圆角图片"></a>7.UIImage添加生成圆角图片</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (UIImage *)imageWithCornerRadius:(CGFloat)radius &#123;  </span><br><span class="line">  CGRect rect = (CGRect)&#123;0.f, 0.f, self.size&#125;;  </span><br><span class="line">  UIGraphicsBeginImageContextWithOptions(self.size, NO, UIScreen.mainScreen.scale);  </span><br><span class="line">  CGContextAddPath(UIGraphicsGetCurrentContext(),  </span><br><span class="line">                   [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:radius].CGPath);  </span><br><span class="line">  CGContextClip(UIGraphicsGetCurrentContext());  </span><br><span class="line">  [self drawInRect:rect];  </span><br><span class="line">  UIImage *image = UIGraphicsGetImageFromCurrentImageContext();  </span><br><span class="line">  </span><br><span class="line">  UIGraphicsEndImageContext();  </span><br><span class="line">  </span><br><span class="line">  return image;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="8-清除缓存"><a href="#8-清除缓存" class="headerlink" title="8.清除缓存"></a>8.清除缓存</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (void)removeCache  </span><br><span class="line">&#123;  </span><br><span class="line">    NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];  </span><br><span class="line">    NSLog(@&quot;%@&quot;,cachePath);  </span><br><span class="line">    NSArray *files = [[NSFileManager defaultManager] subpathsAtPath:cachePath];  </span><br><span class="line">    for (NSString *p in files) &#123;  </span><br><span class="line">        NSString *path = [NSString stringWithFormat:@&quot;%@/%@&quot;, cachePath, p];  </span><br><span class="line">        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) &#123;  </span><br><span class="line">            [[NSFileManager defaultManager] removeItemAtPath:path error:nil];  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="9-计算缓存大小"><a href="#9-计算缓存大小" class="headerlink" title="9.计算缓存大小"></a>9.计算缓存大小</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (CGFloat)floatWithPath:(NSString *)path  </span><br><span class="line">&#123;  </span><br><span class="line">    CGFloat num = 0;  </span><br><span class="line">    NSFileManager *man = [NSFileManager defaultManager];  </span><br><span class="line">    if ([man fileExistsAtPath:path]) &#123;  </span><br><span class="line">        NSEnumerator *childFile = [[man subpathsAtPath:path] objectEnumerator];  </span><br><span class="line">        NSString *fileName;  </span><br><span class="line">        while ((fileName = [childFile nextObject]) != nil) &#123;  </span><br><span class="line">            NSString *fileSub = [path stringByAppendingPathComponent:fileName];  </span><br><span class="line">            num += [self fileSizeAtPath:fileSub];  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    return num / (1024.0 * 1024.0);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="10-计算单个文件大小"><a href="#10-计算单个文件大小" class="headerlink" title="10.计算单个文件大小"></a>10.计算单个文件大小</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (long long)fileSizeAtPath:(NSString *)file  </span><br><span class="line">&#123;  </span><br><span class="line">    NSFileManager *man = [NSFileManager defaultManager];  </span><br><span class="line">    if ([man fileExistsAtPath:file]) &#123;  </span><br><span class="line">        return [[man attributesOfItemAtPath:file error:nil] fileSize];  </span><br><span class="line">    &#125;  </span><br><span class="line">    return 0;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="11-UITableView的plain样式下，取消区头停滞效果"><a href="#11-UITableView的plain样式下，取消区头停滞效果" class="headerlink" title="11.UITableView的plain样式下，取消区头停滞效果"></a>11.UITableView的plain样式下，取消区头停滞效果</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (void)scrollViewDidScroll:(UIScrollView *)scrollView</span><br><span class="line">&#123;</span><br><span class="line">    CGFloat sectionHeaderHeight = sectionHead.height;</span><br><span class="line">    if (scrollView.contentOffset.y&lt;=sectionHeaderHeight&amp;&amp;scrollView;.contentOffset.y&gt;=0)</span><br><span class="line">    &#123;</span><br><span class="line">        scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(scrollView.contentOffset.y&gt;=sectionHeaderHeight)</span><br><span class="line">    &#123;</span><br><span class="line">        scrollView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="12-获取某个view所在的控制器"><a href="#12-获取某个view所在的控制器" class="headerlink" title="12.获取某个view所在的控制器"></a>12.获取某个view所在的控制器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (UIViewController *)viewController</span><br><span class="line">&#123;</span><br><span class="line">  UIViewController *viewController = nil;  </span><br><span class="line">  UIResponder *next = self.nextResponder;</span><br><span class="line">  while (next)</span><br><span class="line">  &#123;</span><br><span class="line">    if ([next isKindOfClass:[UIViewController class]])</span><br><span class="line">    &#123;</span><br><span class="line">      viewController = (UIViewController *)next;      </span><br><span class="line">      break;    </span><br><span class="line">    &#125;    </span><br><span class="line">    next = next.nextResponder;  </span><br><span class="line">  &#125; </span><br><span class="line">    return viewController;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="13-取图片某一像素点的颜色-在UIImage的分类中"><a href="#13-取图片某一像素点的颜色-在UIImage的分类中" class="headerlink" title="13.取图片某一像素点的颜色 在UIImage的分类中"></a>13.取图片某一像素点的颜色 在UIImage的分类中</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">- (UIColor *)colorAtPixel:(CGPoint)point</span><br><span class="line">&#123;</span><br><span class="line">    if (!CGRectContainsPoint(CGRectMake(0.0f, 0.0f, self.size.width, self.size.height), point))</span><br><span class="line">    &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</span><br><span class="line">    int bytesPerPixel = 4;</span><br><span class="line">    int bytesPerRow = bytesPerPixel * 1;</span><br><span class="line">    NSUInteger bitsPerComponent = 8;</span><br><span class="line">    unsigned char pixelData[4] = &#123;0, 0, 0, 0&#125;;</span><br><span class="line">    </span><br><span class="line">    CGContextRef context = CGBitmapContextCreate(pixelData,</span><br><span class="line">                                                 1,</span><br><span class="line">                                                 1,</span><br><span class="line">                                                 bitsPerComponent,</span><br><span class="line">                                                 bytesPerRow,</span><br><span class="line">                                                 colorSpace,</span><br><span class="line">                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);</span><br><span class="line">    CGColorSpaceRelease(colorSpace);</span><br><span class="line">    CGContextSetBlendMode(context, kCGBlendModeCopy);</span><br><span class="line">    </span><br><span class="line">    CGContextTranslateCTM(context, -point.x, point.y - self.size.height);</span><br><span class="line">    CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, self.size.width, self.size.height), self.CGImage);</span><br><span class="line">    CGContextRelease(context);</span><br><span class="line">    </span><br><span class="line">    CGFloat red   = (CGFloat)pixelData[0] / 255.0f;</span><br><span class="line">    CGFloat green = (CGFloat)pixelData[1] / 255.0f;</span><br><span class="line">    CGFloat blue  = (CGFloat)pixelData[2] / 255.0f;</span><br><span class="line">    CGFloat alpha = (CGFloat)pixelData[3] / 255.0f;</span><br><span class="line">    </span><br><span class="line">    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="14-字符串反转"><a href="#14-字符串反转" class="headerlink" title="14.字符串反转"></a>14.字符串反转</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">第一种：</span><br><span class="line">- (NSString *)reverseWordsInString:(NSString *)str</span><br><span class="line">&#123;    </span><br><span class="line">    NSMutableString *newString = [[NSMutableString alloc] initWithCapacity:str.length];</span><br><span class="line">    for (NSInteger i = str.length - 1; i &gt;= 0 ; i --)</span><br><span class="line">    &#123;</span><br><span class="line">        unichar ch = [str characterAtIndex:i];       </span><br><span class="line">        [newString appendFormat:@&quot;%c&quot;, ch];    </span><br><span class="line">    &#125;    </span><br><span class="line">     return newString;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//第二种：</span><br><span class="line">- (NSString*)reverseWordsInString:(NSString*)str</span><br><span class="line">&#123;    </span><br><span class="line">     NSMutableString *reverString = [NSMutableString stringWithCapacity:str.length];    </span><br><span class="line">     [str enumerateSubstringsInRange:NSMakeRange(0, str.length) options:NSStringEnumerationReverse | NSStringEnumerationByComposedCharacterSequences  usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) &#123; </span><br><span class="line">          [reverString appendString:substring];                         </span><br><span class="line">      &#125;];    </span><br><span class="line">     return reverString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="15-禁止锁屏"><a href="#15-禁止锁屏" class="headerlink" title="15.禁止锁屏"></a>15.禁止锁屏</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[UIApplication sharedApplication].idleTimerDisabled = YES;</span><br><span class="line">或</span><br><span class="line">[[UIApplication sharedApplication] setIdleTimerDisabled:YES];</span><br></pre></td></tr></table></figure>
+<h5 id="16-iOS获取汉字的拼音"><a href="#16-iOS获取汉字的拼音" class="headerlink" title="16.iOS获取汉字的拼音"></a>16.iOS获取汉字的拼音</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+ (NSString *)transform:(NSString *)chinese</span><br><span class="line">&#123;    </span><br><span class="line">    //将NSString装换成NSMutableString </span><br><span class="line">    NSMutableString *pinyin = [chinese mutableCopy];    </span><br><span class="line">    //将汉字转换为拼音(带音标)    </span><br><span class="line">    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformMandarinLatin, NO);    </span><br><span class="line">    NSLog(@&quot;%@&quot;, pinyin);    </span><br><span class="line">    //去掉拼音的音标    </span><br><span class="line">    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformStripCombiningMarks, NO);    </span><br><span class="line">    NSLog(@&quot;%@&quot;, pinyin);    </span><br><span class="line">    //返回最近结果    </span><br><span class="line">    return pinyin;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="17-手动更改iOS状态栏颜色"><a href="#17-手动更改iOS状态栏颜色" class="headerlink" title="17.手动更改iOS状态栏颜色"></a>17.手动更改iOS状态栏颜色</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)setStatusBarBackgroundColor:(UIColor *)color</span><br><span class="line">&#123;</span><br><span class="line">    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@&quot;statusBarWindow&quot;] valueForKey:@&quot;statusBar&quot;];</span><br><span class="line"></span><br><span class="line">    if ([statusBar respondsToSelector:@selector(setBackgroundColor:)])</span><br><span class="line">    &#123;</span><br><span class="line">        statusBar.backgroundColor = color;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="18-NSArray快速求总和-最大值-最小值-平均值"><a href="#18-NSArray快速求总和-最大值-最小值-平均值" class="headerlink" title="18.NSArray快速求总和 最大值 最小值 平均值"></a>18.NSArray快速求总和 最大值 最小值 平均值</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSArray *array = [NSArray arrayWithObjects:@&quot;2.0&quot;, @&quot;2.3&quot;, @&quot;3.0&quot;, @&quot;4.0&quot;, @&quot;10&quot;, nil];</span><br><span class="line">CGFloat sum = [[array valueForKeyPath:@&quot;@sum.floatValue&quot;] floatValue];</span><br><span class="line">CGFloat avg = [[array valueForKeyPath:@&quot;@avg.floatValue&quot;] floatValue];</span><br><span class="line">CGFloat max =[[array valueForKeyPath:@&quot;@max.floatValue&quot;] floatValue];</span><br><span class="line">CGFloat min =[[array valueForKeyPath:@&quot;@min.floatValue&quot;] floatValue];</span><br><span class="line">NSLog(@&quot;%f\n%f\n%f\n%f&quot;,sum,avg,max,min);</span><br></pre></td></tr></table></figure>
+<h5 id="19-修改UITextField中的Placeholder的文字颜色"><a href="#19-修改UITextField中的Placeholder的文字颜色" class="headerlink" title="19.修改UITextField中的Placeholder的文字颜色"></a>19.修改UITextField中的Placeholder的文字颜色</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[textField setValue:[UIColor redColor] forKeyPath:@&quot;_placeholderLabel.textColor&quot;];</span><br></pre></td></tr></table></figure>
+<h5 id="20-GCD-timer定时器"><a href="#20-GCD-timer定时器" class="headerlink" title="20.GCD timer定时器"></a>20.GCD timer定时器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</span><br><span class="line">dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);</span><br><span class="line">dispatch_source_set_timer(timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0); //每秒执行</span><br><span class="line">dispatch_source_set_event_handler(timer, ^&#123;</span><br><span class="line">    //@&quot;倒计时结束，关闭&quot;</span><br><span class="line">    dispatch_source_cancel(timer); </span><br><span class="line">    dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">dispatch_resume(timer);</span><br></pre></td></tr></table></figure>
+<h5 id="21-图片上绘制文字-写一个UIImage的category"><a href="#21-图片上绘制文字-写一个UIImage的category" class="headerlink" title="21.图片上绘制文字 写一个UIImage的category"></a>21.图片上绘制文字 写一个UIImage的category</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">- (UIImage *)imageWithTitle:(NSString *)title fontSize:(CGFloat)fontSize</span><br><span class="line">&#123;</span><br><span class="line">    //画布大小</span><br><span class="line">    CGSize size=CGSizeMake(self.size.width,self.size.height);</span><br><span class="line">    //创建一个基于位图的上下文</span><br><span class="line">    UIGraphicsBeginImageContextWithOptions(size,NO,0.0);//opaque:NO  scale:0.0</span><br><span class="line">    </span><br><span class="line">    [self drawAtPoint:CGPointMake(0.0,0.0)];</span><br><span class="line">    </span><br><span class="line">    //文字居中显示在画布上</span><br><span class="line">    NSMutableParagraphStyle* paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];</span><br><span class="line">    paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;</span><br><span class="line">    paragraphStyle.alignment=NSTextAlignmentCenter;//文字居中</span><br><span class="line">    </span><br><span class="line">    //计算文字所占的size,文字居中显示在画布上</span><br><span class="line">    CGSize sizeText=[title boundingRectWithSize:self.size options:NSStringDrawingUsesLineFragmentOrigin</span><br><span class="line">                                     attributes:@&#123;NSFontAttributeName:[UIFont systemFontOfSize:fontSize]&#125;context:nil].size;</span><br><span class="line">    CGFloat width = self.size.width;</span><br><span class="line">    CGFloat height = self.size.height;</span><br><span class="line">    </span><br><span class="line">    CGRect rect = CGRectMake((width-sizeText.width)/2, (height-sizeText.height)/2, sizeText.width, sizeText.height);</span><br><span class="line">    //绘制文字</span><br><span class="line">    [title drawInRect:rect withAttributes:@&#123; NSFontAttributeName:[UIFont systemFontOfSize:fontSize],NSForegroundColorAttributeName:[ UIColor whiteColor],NSParagraphStyleAttributeName:paragraphStyle&#125;];</span><br><span class="line">    </span><br><span class="line">    //返回绘制的新图形</span><br><span class="line">    UIImage *newImage= UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">    UIGraphicsEndImageContext();</span><br><span class="line">    return newImage;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="22-防止ScrollView手势覆盖侧滑手势"><a href="#22-防止ScrollView手势覆盖侧滑手势" class="headerlink" title="22.防止ScrollView手势覆盖侧滑手势"></a>22.防止ScrollView手势覆盖侧滑手势</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[scrollView.panGestureRecognizerrequireGestureRecognizerToFail:self.navigationController.interactivePopGestureRecognizer];</span><br></pre></td></tr></table></figure>
+<h5 id="23-dispatch-group的使用"><a href="#23-dispatch-group的使用" class="headerlink" title="23.dispatch_group的使用"></a>23.dispatch_group的使用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">dispatch_group_t dispatchGroup = dispatch_group_create();</span><br><span class="line">    dispatch_group_enter(dispatchGroup);</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        NSLog(@&quot;第一个请求完成&quot;);</span><br><span class="line">        dispatch_group_leave(dispatchGroup);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_group_enter(dispatchGroup);</span><br><span class="line">    </span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        NSLog(@&quot;第二个请求完成&quot;);</span><br><span class="line">        dispatch_group_leave(dispatchGroup);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^()&#123;</span><br><span class="line">        NSLog(@&quot;请求完成&quot;);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="24-navigationBar根据滑动距离的渐变色实现"><a href="#24-navigationBar根据滑动距离的渐变色实现" class="headerlink" title="24.navigationBar根据滑动距离的渐变色实现"></a>24.navigationBar根据滑动距离的渐变色实现</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">//第一种</span><br><span class="line">- (void)scrollViewDidScroll:(UIScrollView *)scrollView</span><br><span class="line">&#123;</span><br><span class="line">    CGFloat offsetToShow = 200.0;//滑动多少就完全显示</span><br><span class="line">    CGFloat alpha = 1 - (offsetToShow - scrollView.contentOffset.y) / offsetToShow;</span><br><span class="line">    [[self.navigationController.navigationBar subviews] objectAtIndex:0].alpha = alpha;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//第二种</span><br><span class="line">- (void)scrollViewDidScroll:(UIScrollView *)scrollView</span><br><span class="line">&#123;</span><br><span class="line">    CGFloat offsetToShow = 200.0;</span><br><span class="line">    CGFloat alpha = 1 - (offsetToShow - scrollView.contentOffset.y) / offsetToShow;</span><br><span class="line">    </span><br><span class="line">    [self.navigationController.navigationBar setShadowImage:[UIImage new]];</span><br><span class="line">    [self.navigationController.navigationBar setBackgroundImage:[self imageWithColor:[[UIColor orangeColor]colorWithAlphaComponent:alpha]] forBarMetrics:UIBarMetricsDefault];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//生成一张纯色的图片</span><br><span class="line">- (UIImage *)imageWithColor:(UIColor *)color</span><br><span class="line">&#123;</span><br><span class="line">    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);</span><br><span class="line">    UIGraphicsBeginImageContext(rect.size);</span><br><span class="line">    CGContextRef context = UIGraphicsGetCurrentContext();</span><br><span class="line">    CGContextSetFillColorWithColor(context, [color CGColor]);</span><br><span class="line">    CGContextFillRect(context, rect);</span><br><span class="line">    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">    UIGraphicsEndImageContext();</span><br><span class="line">    </span><br><span class="line">    return theImage;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/17/Tips/" rel="next" title="eclipse快捷键">
+                <i class="fa fa-chevron-left"></i> eclipse快捷键
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/31/Xcode-Tool/" rel="prev" title="插件管理">
+                插件管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS一些小操作"><span class="nav-number">1.</span> <span class="nav-text">iOS一些小操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-返回字符串所占用的size"><span class="nav-number">1.0.0.0.1.</span> <span class="nav-text">1.返回字符串所占用的size</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-tableView自动滑到某一行"><span class="nav-number">1.0.0.0.2.</span> <span class="nav-text">2.tableView自动滑到某一行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-tableView刷新到某个分区或行"><span class="nav-number">1.0.0.0.3.</span> <span class="nav-text">3.tableView刷新到某个分区或行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-读取plist文件"><span class="nav-number">1.0.0.0.4.</span> <span class="nav-text">4.读取plist文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-关键字高亮"><span class="nav-number">1.0.0.0.5.</span> <span class="nav-text">5.关键字高亮</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-去掉字符串中的空格"><span class="nav-number">1.0.0.0.6.</span> <span class="nav-text">6.去掉字符串中的空格</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-UIImage添加生成圆角图片"><span class="nav-number">1.0.0.0.7.</span> <span class="nav-text">7.UIImage添加生成圆角图片</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-清除缓存"><span class="nav-number">1.0.0.0.8.</span> <span class="nav-text">8.清除缓存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#9-计算缓存大小"><span class="nav-number">1.0.0.0.9.</span> <span class="nav-text">9.计算缓存大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#10-计算单个文件大小"><span class="nav-number">1.0.0.0.10.</span> <span class="nav-text">10.计算单个文件大小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#11-UITableView的plain样式下，取消区头停滞效果"><span class="nav-number">1.0.0.0.11.</span> <span class="nav-text">11.UITableView的plain样式下，取消区头停滞效果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#12-获取某个view所在的控制器"><span class="nav-number">1.0.0.0.12.</span> <span class="nav-text">12.获取某个view所在的控制器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#13-取图片某一像素点的颜色-在UIImage的分类中"><span class="nav-number">1.0.0.0.13.</span> <span class="nav-text">13.取图片某一像素点的颜色 在UIImage的分类中</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#14-字符串反转"><span class="nav-number">1.0.0.0.14.</span> <span class="nav-text">14.字符串反转</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#15-禁止锁屏"><span class="nav-number">1.0.0.0.15.</span> <span class="nav-text">15.禁止锁屏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#16-iOS获取汉字的拼音"><span class="nav-number">1.0.0.0.16.</span> <span class="nav-text">16.iOS获取汉字的拼音</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#17-手动更改iOS状态栏颜色"><span class="nav-number">1.0.0.0.17.</span> <span class="nav-text">17.手动更改iOS状态栏颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#18-NSArray快速求总和-最大值-最小值-平均值"><span class="nav-number">1.0.0.0.18.</span> <span class="nav-text">18.NSArray快速求总和 最大值 最小值 平均值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#19-修改UITextField中的Placeholder的文字颜色"><span class="nav-number">1.0.0.0.19.</span> <span class="nav-text">19.修改UITextField中的Placeholder的文字颜色</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#20-GCD-timer定时器"><span class="nav-number">1.0.0.0.20.</span> <span class="nav-text">20.GCD timer定时器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#21-图片上绘制文字-写一个UIImage的category"><span class="nav-number">1.0.0.0.21.</span> <span class="nav-text">21.图片上绘制文字 写一个UIImage的category</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#22-防止ScrollView手势覆盖侧滑手势"><span class="nav-number">1.0.0.0.22.</span> <span class="nav-text">22.防止ScrollView手势覆盖侧滑手势</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#23-dispatch-group的使用"><span class="nav-number">1.0.0.0.23.</span> <span class="nav-text">23.dispatch_group的使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#24-navigationBar根据滑动距离的渐变色实现"><span class="nav-number">1.0.0.0.24.</span> <span class="nav-text">24.navigationBar根据滑动距离的渐变色实现</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

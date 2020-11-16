@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介上一节我们将一个小说内容按照章节分成数组。这节我们就将每一章节的内容按照每页能展示字数再次分页，即比如一个页面展示500字，一章有5100字，那么第一页0-499，第二页500-999，。。。4999-5100最后一页。需要11页。所以这一张需要11页。按照这个逻辑，我们需要把所有章节再次分页。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小说阅读器（四）- 小说翻页">
+<meta property="og:url" content="http://langg.top/2019/10/11/bookReader-04/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="简介上一节我们将一个小说内容按照章节分成数组。这节我们就将每一章节的内容按照每页能展示字数再次分页，即比如一个页面展示500字，一章有5100字，那么第一页0-499，第二页500-999，。。。4999-5100最后一页。需要11页。所以这一张需要11页。按照这个逻辑，我们需要把所有章节再次分页。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://langg.top/2019/10/11/bookReader-04/2019-10-16%2011.01.50.gif">
+<meta property="og:updated_time" content="2019-10-16T03:08:42.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小说阅读器（四）- 小说翻页">
+<meta name="twitter:description" content="简介上一节我们将一个小说内容按照章节分成数组。这节我们就将每一章节的内容按照每页能展示字数再次分页，即比如一个页面展示500字，一章有5100字，那么第一页0-499，第二页500-999，。。。4999-5100最后一页。需要11页。所以这一张需要11页。按照这个逻辑，我们需要把所有章节再次分页。">
+<meta name="twitter:image" content="http://langg.top/2019/10/11/bookReader-04/2019-10-16%2011.01.50.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/10/11/bookReader-04/"/>
+
+
+
+
+
+  <title>小说阅读器（四）- 小说翻页 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/10/11/bookReader-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">小说阅读器（四）- 小说翻页</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-11T10:42:54+08:00">
+                2019-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><p>上一节我们将一个小说内容按照章节分成数组。这节我们就将每一章节的内容按照每页能展示字数再次分页，即比如一个页面展示500字，一章有5100字，那么第一页0-499，第二页500-999，。。。4999-5100最后一页。需要11页。所以这一张需要11页。按照这个逻辑，我们需要把所有章节再次分页。</p>
+<a id="more"></a>
+<p>方法介绍：</p>
+<ul>
+<li><p><code>CTFramesetterRef</code>:绘图CTFramesetter是CTFrame的创建工厂，NSAttributedString需要通过CTFrame绘制到界面上， 得到CTFramesetter后，创建path（绘制路径），然后得到CTFrame，最后通过CTFrameDraw方法绘制到界面上</p>
+</li>
+<li><p><code>CTFrameRef</code>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* 创建frame</span><br><span class="line">  四个参数：</span><br><span class="line">  framesetter：生成frame的工厂</span><br><span class="line">  range：设置多大就显示多少字符。设置为0时，完整显示。</span><br><span class="line">  path：</span><br><span class="line">  frameAttributes：额外控制frame的属性字典。</span><br><span class="line">*/</span><br><span class="line">CTFramesetterCreateFrame(&lt;#CTFramesetterRef  _Nonnull framesetter#&gt;, &lt;#CFRange stringRange#&gt;, &lt;#CGPathRef  _Nonnull path#&gt;, &lt;#CFDictionaryRef  _Nullable frameAttributes#&gt;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们可以循环获取frame适应的字符的range，然后分割一章节的内容。</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">-(void)paginateWithBounds:(CGRect)bounds&#123;</span><br><span class="line">    [_pageArray removeAllObjects];</span><br><span class="line">    </span><br><span class="line">    //文本内容</span><br><span class="line">    NSMutableAttributedString *attrString;</span><br><span class="line">    //创建绘图CTFramesetter是CTFrame的创建工厂，NSAttributedString需要通过CTFrame绘制到界面上， 得到CTFramesetter后，创建path（绘制路径），然后得到CTFrame，最后通过CTFrameDraw方法绘制到界面上</span><br><span class="line">    CTFramesetterRef frameSetter;</span><br><span class="line">    //绘制路径</span><br><span class="line">    CGPathRef path;</span><br><span class="line">    //文本内容</span><br><span class="line">    NSMutableAttributedString *attrStr;</span><br><span class="line">    attrStr = [[NSMutableAttributedString alloc] initWithString:self.content];</span><br><span class="line">    //配置文字属性（字号、大小、间隔等）</span><br><span class="line">    NSDictionary *attribute = [GLReadParser parserAttribute:[GLReadConfig sharedInstance]];</span><br><span class="line">    [attrStr setAttributes:attribute range:NSMakeRange(0, attrStr.length)];</span><br><span class="line">    attrString = [attrStr copy];</span><br><span class="line">  </span><br><span class="line">    frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrString);</span><br><span class="line">    path = CGPathCreateWithRect(bounds, NULL);</span><br><span class="line">    int currentOffset = 0;</span><br><span class="line">    int currentInnerOffset = 0;</span><br><span class="line">    BOOL hasMorePages = YES;</span><br><span class="line">    </span><br><span class="line">    // 防止死循环，如果在同一个位置获取CTFrame超过2次，则跳出循环</span><br><span class="line">    int preventDeadLoopSign = currentOffset;</span><br><span class="line">    int samePlaceRepeatCount = 0;</span><br><span class="line">    while (hasMorePages) &#123;</span><br><span class="line">        if (preventDeadLoopSign == currentOffset) &#123;</span><br><span class="line">            ++samePlaceRepeatCount;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            samePlaceRepeatCount = 0;</span><br><span class="line">        &#125;</span><br><span class="line">        if (samePlaceRepeatCount &gt; 1) &#123;</span><br><span class="line">           // 退出循环前检查一下最后一页是否已经加上</span><br><span class="line">            if (_pageArray.count == 0) &#123;</span><br><span class="line">                [_pageArray addObject:@(currentOffset)];</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                NSUInteger lastOffset = [[_pageArray lastObject] integerValue];</span><br><span class="line">                if (lastOffset != currentOffset) &#123;</span><br><span class="line">                    [_pageArray addObject:@(currentOffset)];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        [_pageArray addObject:@(currentOffset)];</span><br><span class="line">        /* 创建frame</span><br><span class="line">        四个参数：</span><br><span class="line">        framesetter：生成frame的工厂</span><br><span class="line">        range：设置多大就显示多少字符。设置为0时，完整显示。</span><br><span class="line">        path：</span><br><span class="line">        frameAttributes：额外控制frame的属性字典。</span><br><span class="line">        */</span><br><span class="line">        CTFrameRef frame = CTFramesetterCreateFrame(frameSetter, CFRangeMake(currentInnerOffset, 0), path, NULL);</span><br><span class="line">        </span><br><span class="line">        // 获取真正在frame适应的字符的range</span><br><span class="line">        CFRange range = CTFrameGetVisibleStringRange(frame);</span><br><span class="line">        if ((range.location + range.length) != attrString.length) &#123;</span><br><span class="line">            currentOffset += range.length;</span><br><span class="line">            currentInnerOffset += range.length;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            //已经分页完,跳出循环</span><br><span class="line">            hasMorePages = NO;</span><br><span class="line">        &#125;</span><br><span class="line">        if (frame) CFRelease(frame);</span><br><span class="line">    &#125;</span><br><span class="line">    CGPathRelease(path);</span><br><span class="line">    CFRelease(frameSetter);</span><br><span class="line">    _pageCount = _pageArray.count;</span><br><span class="line">&#125;</span><br><span class="line">//根据存入chapterModel里的pageArray数组，取出每一页的字符range，再根据一章的内容，取出当前页的字符。</span><br><span class="line">- (NSString *)stringOfPage:(NSUInteger)index&#123; </span><br><span class="line">    NSUInteger local = [_pageArray[index] integerValue];</span><br><span class="line">    NSUInteger length;</span><br><span class="line">    if (index &lt; self.pageCount - 1) &#123;</span><br><span class="line">        length = [_pageArray[index+1] integerValue] - [_pageArray[index] integerValue];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        length = _content.length - [_pageArray[index] integerValue];</span><br><span class="line">    &#125;</span><br><span class="line">    return [_content substringWithRange:NSMakeRange(local, length)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处pageArray里的都是一章节分成的range，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(lldb) po _pageArray</span><br><span class="line">&lt;__NSArrayM 0x6000018d1c80&gt;(</span><br><span class="line">0,</span><br><span class="line">455,</span><br><span class="line">798,</span><br><span class="line">1214,</span><br><span class="line">1706,</span><br><span class="line">2242</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以看到这章节分为了6页。 </p>
+<h5 id="翻页阅读"><a href="#翻页阅读" class="headerlink" title="翻页阅读"></a>翻页阅读</h5><p>创建readViewController展示阅读页，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line">#import &quot;GLReadRecordModel.h&quot;</span><br><span class="line">#import &quot;GLReadView.h&quot;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line">@interface GLReadViewController : UIViewController</span><br><span class="line"></span><br><span class="line">@property (nonatomic,strong) NSString *content; //显示的内容</span><br><span class="line">@property (nonatomic,strong) GLReadRecordModel *recordModel;   //阅读进度</span><br><span class="line">@property (nonatomic,strong) GLReadView *readView;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;GLReadViewController.h&quot;</span><br><span class="line">#import &quot;GLReadParser.h&quot;</span><br><span class="line">#import &quot;GLReadConfig.h&quot;</span><br><span class="line">@interface GLReadViewController ()</span><br><span class="line">@end</span><br><span class="line">@implementation GLReadViewController</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">  //设置阅读背景色</span><br><span class="line">    [self.view setBackgroundColor:[GLReadConfig sharedInstance].themeColor];</span><br><span class="line">  //文字view添加到view上</span><br><span class="line">    [self.view addSubview:self.readView];  </span><br><span class="line">&#125;</span><br><span class="line">#pragma mark - 阅读展示view</span><br><span class="line">- (GLReadView *)readView&#123;</span><br><span class="line">    if (!_readView) &#123;</span><br><span class="line">        _readView = [[GLReadView alloc] initWithFrame:CGRectMake(LeftSpacing, TopSpacing, self.view.frame.size.width-LeftSpacing-RightSpacing, self.view.frame.size.height-TopSpacing-BottomSpacing)];</span><br><span class="line">        GLReadConfig *config = [GLReadConfig sharedInstance];</span><br><span class="line">      //把文本绘制到view上</span><br><span class="line">        _readView.frameRef = [GLReadParser parserContent:_content config:config bouds:CGRectMake(0,0, _readView.frame.size.width, _readView.frame.size.height)];</span><br><span class="line">        _readView.content = _content;</span><br><span class="line">    &#125;</span><br><span class="line">    return _readView;</span><br><span class="line">&#125;</span><br><span class="line">-(void)dealloc&#123; </span><br><span class="line">    [[NSNotificationCenter defaultCenter] removeObserver:self];</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>创建readPageViewController，用来放所有的文字阅读页。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line">#import &quot;GLReadModel.h&quot;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line">@interface GLReadPageViewController : UIViewController</span><br><span class="line">@property (nonatomic, strong) NSURL *resourceURL;</span><br><span class="line">@property (nonatomic, strong) GLReadModel *model;</span><br><span class="line">@end</span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line"></span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;GLReadPageViewController.h&quot;</span><br><span class="line">#import &quot;GLReadViewController.h&quot;</span><br><span class="line">#import &quot;GLReadChapterModel.h&quot;</span><br><span class="line">@interface GLReadPageViewController ()&lt;UIPageViewControllerDelegate,UIPageViewControllerDataSource&gt;&#123;</span><br><span class="line">    NSUInteger _chapter;            /**&lt; 当前显示的章节*/</span><br><span class="line">    NSUInteger _page;               /**&lt; 当前显示的页index*/</span><br><span class="line">    NSUInteger _chapterChange;      /**&lt; 将要变化的章节*/</span><br><span class="line">    NSUInteger _pageChange;         /**&lt; 将要变化的页index*/</span><br><span class="line">&#125;</span><br><span class="line">@property (nonatomic, strong) UIPageViewController *pageViewController;</span><br><span class="line">@property (nonatomic,getter=isShowBar) BOOL showBar; //是否显示状态栏</span><br><span class="line">@property (nonatomic, strong) GLReadViewController *readView;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation GLReadPageViewController</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">  //将pageView控制器添加到VC控制器上</span><br><span class="line">    [self addChildViewController:self.pageViewController];</span><br><span class="line">  //将阅读页放在翻页控制器上</span><br><span class="line">    [_pageViewController setViewControllers:@[[self readViewWithChapter:_model.record.chapter page:_model.record.page]] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];</span><br><span class="line">  //当前章节</span><br><span class="line">    _chapter = _model.record.chapter;</span><br><span class="line">  //当前页index</span><br><span class="line">    _page = _model.record.page;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - UIPageViewControllerDataSource</span><br><span class="line">//1.页面往后翻，返回后翻之后的pageViewController</span><br><span class="line">- (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerAfterViewController:(nonnull UIViewController *)viewController &#123;</span><br><span class="line">    _pageChange = _page;//将当前阅读的页index赋值给将要阅读的页</span><br><span class="line">    _chapterChange = _chapter;//将当前章赋值给将要到的章节 </span><br><span class="line">    //如果当前页inde为最后一页，并且当前章为最后一章，则翻页到最后了m，即不能翻页了。</span><br><span class="line">    if (_pageChange == _model.chapters.lastObject.pageCount - 1 &amp;&amp; _chapterChange == _model.chapters.count - 1) &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    //如果当前页等于当前章节的最后一页，则章节加1，当前页置0；</span><br><span class="line">    if (_pageChange == _model.chapters[_chapterChange].pageCount - 1) &#123;</span><br><span class="line">        _chapterChange++;</span><br><span class="line">        _pageChange = 0;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        _pageChange++;</span><br><span class="line">    &#125;</span><br><span class="line">    return [self readViewWithChapter:_chapterChange page:_pageChange];</span><br><span class="line">&#125;</span><br><span class="line">//1.页面往前翻</span><br><span class="line">- (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerBeforeViewController:(nonnull UIViewController *)viewController &#123;</span><br><span class="line">  </span><br><span class="line">    _pageChange = _page;</span><br><span class="line">    _chapterChange = _chapter;</span><br><span class="line">    //如果当前页等于0并且当前章节为0，则不能往前翻页了。</span><br><span class="line">    if (_pageChange == 0 &amp;&amp; _chapterChange == 0) &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    //如果当前页为0，则章节减1，当前页变成上一章节的最后一页</span><br><span class="line">    if (_pageChange == 0) &#123;</span><br><span class="line">        _chapterChange--;</span><br><span class="line">        _pageChange = _model.chapters[_chapterChange].pageCount-1;  </span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        _pageChange--;</span><br><span class="line">    &#125;</span><br><span class="line">    return [self readViewWithChapter:_chapterChange page:_pageChange];</span><br><span class="line">&#125;</span><br><span class="line">#pragma Mark- GLReadViewController</span><br><span class="line">//2. 阅读视图。</span><br><span class="line">-(GLReadViewController *)readViewWithChapter:(NSUInteger)chapter page:(NSUInteger)page&#123;</span><br><span class="line">    </span><br><span class="line">    _readView = [[GLReadViewController alloc] init];</span><br><span class="line">    _readView.recordModel = _model.record;</span><br><span class="line">  //根据存入chapterModel里的pageArray数组，取出每一页的字符range，再根据一章的内容，取出当前页的字符。</span><br><span class="line">    _readView.content = [_model.chapters[chapter] stringOfPage:page];</span><br><span class="line">    return _readView;</span><br><span class="line">&#125;</span><br><span class="line">#pragma mark - UIPageViewControllerDelegate</span><br><span class="line">//3.UIPageViewController将要翻页的代理</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray&lt;UIViewController *&gt; *)pendingViewControllers&#123;</span><br><span class="line">    _chapter = _chapterChange;</span><br><span class="line">    _page = _pageChange;</span><br><span class="line">&#125;</span><br><span class="line">//4.UIPageViewController翻页完成的代理</span><br><span class="line">- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray&lt;UIViewController *&gt; *)previousViewControllers transitionCompleted:(BOOL)completed&#123;</span><br><span class="line">    if (!completed) &#123;//翻到一般又翻回去，即翻页没有完成。</span><br><span class="line">        GLReadViewController *readView = previousViewControllers.firstObject;</span><br><span class="line">        _readView = readView;</span><br><span class="line">        _page = readView.recordModel.page;</span><br><span class="line">        _chapter = readView.recordModel.chapter;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        [self updateReadModelWithChapter:_chapter page:_page];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//5. 翻页后最新阅读第几章节的第几页</span><br><span class="line">-(void)updateReadModelWithChapter:(NSUInteger)chapter page:(NSUInteger)page&#123;</span><br><span class="line">    </span><br><span class="line">    _chapter = chapter;</span><br><span class="line">    _page = page;</span><br><span class="line">    _model.record.chapterModel = _model.chapters[chapter];</span><br><span class="line">    _model.record.chapter = chapter;</span><br><span class="line">    _model.record.page = page;</span><br><span class="line">    //更新记录本地阅读记录</span><br><span class="line">    [GLReadModel updateLocalModel:_model url:_resourceURL];</span><br><span class="line">&#125;</span><br><span class="line">#pragma mark - lazy set</span><br><span class="line">-(UIPageViewController *)pageViewController&#123;</span><br><span class="line">    if (!_pageViewController) &#123;</span><br><span class="line">        _pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];</span><br><span class="line">        _pageViewController.delegate = self;</span><br><span class="line">        _pageViewController.dataSource = self;</span><br><span class="line">        [self.view addSubview:_pageViewController.view];</span><br><span class="line">    &#125;</span><br><span class="line">    return _pageViewController;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>以上是小说阅读的核心代码，效果如下：</p>
+<p><img src="/2019/10/11/bookReader-04/2019-10-16 11.01.50.gif" style="width:300px"></p>
+<p>参考：<a href="https://github.com/WiitterSimithYU/Reader" target="_blank" rel="noopener">https://github.com/WiitterSimithYU/Reader</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/27/bookReader-03/" rel="next" title="小说阅读器（三）-使用coreText对长文本进行分页">
+                <i class="fa fa-chevron-left"></i> 小说阅读器（三）-使用coreText对长文本进行分页
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/16/iOS-GCD-DispatchQueue/" rel="prev" title="iOS并发编程指南">
+                iOS并发编程指南 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#翻页阅读"><span class="nav-number">2.</span> <span class="nav-text">翻页阅读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

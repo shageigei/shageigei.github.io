@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="抽空研究了下github上的小说阅读器，现在来解析下如何写一个简单的小说阅读器。 先期准备工作：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小说阅读器（一）—— 文本绘制">
+<meta property="og:url" content="http://langg.top/2019/09/20/bookReader/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="抽空研究了下github上的小说阅读器，现在来解析下如何写一个简单的小说阅读器。 先期准备工作：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://langg.top/2019/09/20/bookReader/bookReader_1.png">
+<meta property="og:image" content="http://langg.top/2019/09/20/bookReader/bookReader_2.png">
+<meta property="og:updated_time" content="2019-09-25T08:32:15.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小说阅读器（一）—— 文本绘制">
+<meta name="twitter:description" content="抽空研究了下github上的小说阅读器，现在来解析下如何写一个简单的小说阅读器。 先期准备工作：">
+<meta name="twitter:image" content="http://langg.top/2019/09/20/bookReader/bookReader_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/09/20/bookReader/"/>
+
+
+
+
+
+  <title>小说阅读器（一）—— 文本绘制 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/09/20/bookReader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">小说阅读器（一）—— 文本绘制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-20T16:43:30+08:00">
+                2019-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>抽空研究了下github上的小说阅读器，现在来解析下如何写一个简单的小说阅读器。</p>
+<h6 id="先期准备工作："><a href="#先期准备工作：" class="headerlink" title="先期准备工作："></a>先期准备工作：</h6><a id="more"></a>
+<ul>
+<li>文本绘制</li>
+</ul>
+<p><strong>基于CoreText的排版引擎</strong> 引用网上的介绍：</p>
+<p>​    <code>CoreText</code>是用于处理文字和字体的底层技术。它直接和<code>Core Graphics</code>(又被称为<code>Quartz</code>)打交道。<code>Quartz</code>是一个2D图形渲染引擎，能够处理OSX和iOS中图形显示问题。<code>Quartz</code>能够直接处理字体（font）和字形（glyphs），将文字渲染到界面上，它是基础库中唯一能够处理字形的模块。因此<code>CoreText</code>为了排版，需要将显示的文字内容、位置、字体、字形直接传递给<code>Quartz</code>。与其他UI组件相比，由于<code>CoreText</code>直接和<code>Quartz</code>来交互，所以它具有更高效的排版功能。</p>
+<p>​    下面是CoreText的架构图，可以看到，CoreText处在非常底层的位置，上层的UI控件（包含UILable、UITextField及UITextView）和UIWebView都是基于CoreText来实现的。</p>
+<p><img src="/2019/09/20/bookReader/bookReader_1.png" style="width:500px"></p>
+<p>UIWebview也是处理复杂的文字排版的备选方案。对于排版，基于CoreText和基于UIWebView相比，具有以下不同点：</p>
+<ul>
+<li>CoreText占用内存更少，渲染速度更快，UIWebView占用内存多，渲染速度慢。</li>
+<li>CoreText在渲染界面前就可以精确地获得显示内容的高度（只要有了CTFrame即可），而UIWebView只有渲染出内容后，才能获得内容的高度（而且还需要通过JavaScript代码来获取）。</li>
+<li>CoreText的CTFrame可以在后台线程渲染，UIWebView的内容只能在主线程（UI线程）渲染。</li>
+<li>基于CoreText可以做更好的原生交互效果，交互效果可以更细腻。而UIWebView的交互效果都是利用JavaScript来实现的，在交互效果上会有一些卡顿情况存在。例如，在UIWebView下，一个简单的按钮按下操作，都无法做出原生按钮的即时和细腻的按下效果。</li>
+</ul>
+<p>这里我们先采用coreText来将文本绘制到页面上。</p>
+<p>先创建一个自定义的view，然后在-(void)drawRect:(CGRect)rect方法里绘制</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">- (void)drawRect:(CGRect)rect&#123;</span><br><span class="line">    if (!_frameRef) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     可以这么理解，我们绘图是需要一个载体或者说输出目标，它用来显示绘图信息，并且决定绘制的东西输出到哪个地方。可以形象的比喻context就像一个“画板”，我们得把图形绘制到这个画板上。所以，绘图必须要先有context。</span><br><span class="line">     当你子类化了一个UIView并实现了自己的drawRect：方法后，一旦drawRect：方法被调用，Cocoa就会为你创建一个图形上下文，此时你对图形上下文的所有绘图操作都会显示在UIView上。</span><br><span class="line">     */</span><br><span class="line">    //初始化图形上下文。</span><br><span class="line">    CGContextRef ctx = UIGraphicsGetCurrentContext();</span><br><span class="line">    /**</span><br><span class="line">     普通视图坐标系原点在左上方，而QuartZ绘图的坐标系原点在左下方，所以我们先要调整坐标系。</span><br><span class="line">     */</span><br><span class="line">//    CGContextSetTextMatrix是调整坐标系，防止文字倒立。</span><br><span class="line">    CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);//重置</span><br><span class="line">    //平移坐标系统。该方法相当于把原来位于 (0, 0) 位置的坐标原点平移到 (tx, ty) 点。在平移后的坐标系统上绘制图形时，所有坐标点的 X 坐标都相当于增加了 tx，所有点的 Y 坐标都相当于增加了 ty。</span><br><span class="line">    CGContextTranslateCTM(ctx, 0, self.bounds.size.height);//y轴高度</span><br><span class="line">    //缩放坐标系统。该方法控制坐标系统水平方向上缩放 sx，垂直方向上缩放 sy。在缩放后的坐标系统上绘制图形时，所有点的 X 坐标都相当于乘以 sx 因子，所有点的 Y 坐标都相当于乘以 sy 因子</span><br><span class="line">    CGContextScaleCTM(ctx, 1.0, -1.0);//y轴翻转</span><br><span class="line">    //开始绘制</span><br><span class="line">    CTFrameDraw(_frameRef, ctx);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//创建frameRef的set方法</span><br><span class="line">- (void)setFrameRef:(CTFrameRef)frameRef&#123;</span><br><span class="line">    if (_frameRef != frameRef) &#123;</span><br><span class="line">        if (_frameRef) &#123;</span><br><span class="line">            CFRelease(_frameRef);</span><br><span class="line">            _frameRef = nil;</span><br><span class="line">        &#125;</span><br><span class="line">        _frameRef = frameRef;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>外部调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    self.content = @&quot;CoreText是用于处理文字和字体的底层技术。它直接和Core Graphics(又被称为Quartz)打交道。Quartz是一个2D图形渲染引擎，能够处理OSX和iOS中图形显示问题。Quartz能够直接处理字体（font）和字形（glyphs），将文字渲染到界面上，它是基础库中唯一能够处理字形的模块。因此CoreText为了排版，需要将显示的文字内容、位置、字体、字形直接传递给Quartz。与其他UI组件相比，由于CoreText直接和Quartz来交互，所以它具有更高效的排版功能所以它具有更高效的排版功能所以它具有更高效的排版功能。&quot;;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    [self.view addSubview:self.readView];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#pragma mark - 绘制文字</span><br><span class="line">- (GLReadView *)readView&#123;</span><br><span class="line">    if (!_readView) &#123;</span><br><span class="line">        _readView = [[GLReadView alloc] initWithFrame:CGRectMake(LeftSpacing, TopSpacing, self.view.frame.size.width-LeftSpacing-RightSpacing, self.view.frame.size.height-TopSpacing-BottomSpacing)];</span><br><span class="line">        _readView.frameRef = [self parserContent:self.content bouds:CGRectMake(0,0, _readView.frame.size.width, _readView.frame.size.height)];</span><br><span class="line">        _readView.content = self.content;</span><br><span class="line">    &#125;</span><br><span class="line">    return _readView;</span><br><span class="line">&#125;</span><br><span class="line">//配置和添加文本</span><br><span class="line">-(CTFrameRef)parserContent:(NSString *)content bouds:(CGRect)bounds</span><br><span class="line">&#123;</span><br><span class="line">    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:content];</span><br><span class="line">    //配置文字属性（颜色、大小、间隔）</span><br><span class="line">    NSMutableDictionary *dict = [NSMutableDictionary dictionary];</span><br><span class="line">    dict[NSForegroundColorAttributeName] = [UIColor blackColor];</span><br><span class="line">    dict[NSFontAttributeName] = [UIFont systemFontOfSize:14.0f];</span><br><span class="line">    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];</span><br><span class="line">    paragraphStyle.lineSpacing = 10.0f;</span><br><span class="line">    paragraphStyle.alignment = NSTextAlignmentJustified;</span><br><span class="line">    dict[NSParagraphStyleAttributeName] = paragraphStyle;</span><br><span class="line">    </span><br><span class="line">    NSDictionary *attribute = [dict copy];</span><br><span class="line">    [attributedString setAttributes:attribute range:NSMakeRange(0, content.length)];</span><br><span class="line">    //在 Core Text 中使用 NSAttributedString 而不是NSString，NSAttributedString 是一个非常强大的 NSString 派生类，它允许你对文本应用格式化属性。 现在我们还没有用到格式化，这里仅仅使用纯文本。</span><br><span class="line"></span><br><span class="line">    CTFramesetterRef setterRef = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedString);</span><br><span class="line">    CGPathRef pathRef = CGPathCreateWithRect(bounds, NULL);</span><br><span class="line">    //CTFramesetter 是使用 Core Text 绘制时最重要的类。它管理您的字体引用和文本绘制帧。 目前您需要了解 CTFramesetterCreateWithAttributedString 通过应用属性化文本创建 CTFramesetter</span><br><span class="line">    CTFrameRef frameRef = CTFramesetterCreateFrame(setterRef, CFRangeMake(0, 0), pathRef, NULL);</span><br><span class="line">    CFRelease(setterRef);</span><br><span class="line">    CFRelease(pathRef);</span><br><span class="line">    return frameRef;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先，我们初始化readView并给定大小，然后将配置好文字属性的文本绘制成富文本。当我们把这个view添加到self.view上结束后，会调用drawRect方法，此时，拿到已经配置好的文本开始绘制。这样文字就展现在view上了。</p>
+<p>效果如图：</p>
+<p><img src="/2019/09/20/bookReader/bookReader_2.png" style="width:300px"></p>
+<p>至此，我们完成了文本绘制功能。</p>
+<p><strong><em>ps：</em></strong>我们将配置方法抽取出来放在一个专门的配置类里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface GLReadConfig : NSObject&lt;NSCoding&gt;</span><br><span class="line"></span><br><span class="line">@property (nonatomic, assign) CGFloat fontSize;         /*!&lt; 字体大小*/</span><br><span class="line">@property (nonatomic, assign) CGFloat lineSpace;        /*!&lt; 文字间距*/</span><br><span class="line">@property (nonatomic, strong) UIColor *fontColor;       /*!&lt; 字体颜色*/</span><br><span class="line">@property (nonatomic, strong) UIColor *themeColor;      /*!&lt; 主题颜色*/</span><br><span class="line"></span><br><span class="line">+ (instancetype)sharedInstance;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line">  </span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;GLReadConfig.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation GLReadConfig</span><br><span class="line"></span><br><span class="line">+ (instancetype)sharedInstance &#123;</span><br><span class="line">    static GLReadConfig *_sharedInstance = nil;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        _sharedInstance = [[[self class] alloc]init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return _sharedInstance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (instancetype)init&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        //查看本地是否有配置</span><br><span class="line">        NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@&quot;ReadConfig&quot;];</span><br><span class="line">        if (data) &#123;//如果有配置，则取出配置返回</span><br><span class="line">            NSKeyedUnarchiver *unarchive = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];</span><br><span class="line">            GLReadConfig *config = [unarchive decodeObjectForKey:@&quot;ReadConfig&quot;];</span><br><span class="line">            [config addObserver:config forKeyPath:@&quot;fontSize&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">            [config addObserver:config forKeyPath:@&quot;lineSpace&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">            [config addObserver:config forKeyPath:@&quot;fontColor&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">            [config addObserver:config forKeyPath:@&quot;themeColor&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">            return config;</span><br><span class="line">        &#125;</span><br><span class="line">        //没有设置本地配置，则默认配置，并将配置添加监听。</span><br><span class="line">        _lineSpace = 10.0f;</span><br><span class="line">        _fontSize = 14.0f;</span><br><span class="line">        _fontColor = [UIColor blackColor];</span><br><span class="line">        _themeColor = [UIColor whiteColor];</span><br><span class="line">        [self addObserver:self forKeyPath:@&quot;fontSize&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">        [self addObserver:self forKeyPath:@&quot;lineSpace&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">        [self addObserver:self forKeyPath:@&quot;fontColor&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">        [self addObserver:self forKeyPath:@&quot;themeColor&quot; options:NSKeyValueObservingOptionNew context:NULL];</span><br><span class="line">        [GLReadConfig updateLocalConfig:self];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//监听配置是否改动，改动则更新配置</span><br><span class="line">-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary&lt;NSString *,id&gt; *)change context:(void *)context</span><br><span class="line">&#123;</span><br><span class="line">    [GLReadConfig updateLocalConfig:self];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//更新配置</span><br><span class="line">+(void)updateLocalConfig:(GLReadConfig *)config</span><br><span class="line">&#123;</span><br><span class="line">    NSMutableData *data=[[NSMutableData alloc]init];</span><br><span class="line">    NSKeyedArchiver *archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];</span><br><span class="line">    [archiver encodeObject:config forKey:@&quot;ReadConfig&quot;];</span><br><span class="line">    [archiver finishEncoding];</span><br><span class="line">    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@&quot;ReadConfig&quot;];</span><br><span class="line">&#125;</span><br><span class="line">-(void)encodeWithCoder:(NSCoder *)aCoder</span><br><span class="line">&#123;</span><br><span class="line">    [aCoder encodeDouble:self.fontSize forKey:@&quot;fontSize&quot;];</span><br><span class="line">    [aCoder encodeDouble:self.lineSpace forKey:@&quot;lineSpace&quot;];</span><br><span class="line">    [aCoder encodeObject:self.fontColor forKey:@&quot;fontColor&quot;];</span><br><span class="line">    [aCoder encodeObject:self.themeColor forKey:@&quot;themeColor&quot;];</span><br><span class="line">&#125;</span><br><span class="line">-(id)initWithCoder:(NSCoder *)aDecoder</span><br><span class="line">&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        self.fontSize = [aDecoder decodeDoubleForKey:@&quot;fontSize&quot;];</span><br><span class="line">        self.lineSpace = [aDecoder decodeDoubleForKey:@&quot;lineSpace&quot;];</span><br><span class="line">        self.fontColor = [aDecoder decodeObjectForKey:@&quot;fontColor&quot;];</span><br><span class="line">        self.themeColor = [aDecoder decodeObjectForKey:@&quot;themeColor&quot;];</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/20/AdapteriOS13/" rel="next" title="iOS13适配(持续更新)">
+                <i class="fa fa-chevron-left"></i> iOS13适配(持续更新)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/25/bookReader-02/" rel="prev" title="小说阅读器（二）—— UIPageViewController">
+                小说阅读器（二）—— UIPageViewController <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#先期准备工作："><span class="nav-number">1.</span> <span class="nav-text">先期准备工作：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

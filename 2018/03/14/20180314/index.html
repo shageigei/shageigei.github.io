@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Masonry介绍masonry是基于NSLayoutConstraint封装的第三方布局框架，采用链式编程的方式提供给开发者API，系统autolayout支持的操作Masonry都支持，相比来说更加简洁。 Masonry的使用masonry可以通过Cocoapods直接导入项目中去    1pod &amp;apos;Masonry&amp;apos;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Masonry简单使用">
+<meta property="og:url" content="http://langg.top/2018/03/14/20180314/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="Masonry介绍masonry是基于NSLayoutConstraint封装的第三方布局框架，采用链式编程的方式提供给开发者API，系统autolayout支持的操作Masonry都支持，相比来说更加简洁。 Masonry的使用masonry可以通过Cocoapods直接导入项目中去    1pod &amp;apos;Masonry&amp;apos;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-14T06:15:46.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Masonry简单使用">
+<meta name="twitter:description" content="Masonry介绍masonry是基于NSLayoutConstraint封装的第三方布局框架，采用链式编程的方式提供给开发者API，系统autolayout支持的操作Masonry都支持，相比来说更加简洁。 Masonry的使用masonry可以通过Cocoapods直接导入项目中去    1pod &amp;apos;Masonry&amp;apos;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2018/03/14/20180314/"/>
+
+
+
+
+
+  <title>Masonry简单使用 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2018/03/14/20180314/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Masonry简单使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T13:40:53+08:00">
+                2018-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h6 id="Masonry介绍"><a href="#Masonry介绍" class="headerlink" title="Masonry介绍"></a>Masonry介绍</h6><p>masonry是基于<code>NSLayoutConstraint</code>封装的第三方布局框架，采用链式编程的方式提供给开发者API，系统<code>autolayout</code>支持的操作Masonry都支持，相比来说更加简洁。</p>
+<h6 id="Masonry的使用"><a href="#Masonry的使用" class="headerlink" title="Masonry的使用"></a>Masonry的使用</h6><p>masonry可以通过Cocoapods直接导入项目中去</p>
+   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &apos;Masonry&apos;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>masonry基本的使用：</p>
+<p>注意：使用masonry时必须先将视图加入view上 即：<code>[self.view addSubView:self.testView]</code>然后再在这之后进行约束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mas_makeConstraints()    添加约束</span><br><span class="line">mas_remakeConstraints()  移除之前的约束，重新添加新的约束</span><br><span class="line">mas_updateConstraints()  更新约束，写哪条更新哪条，其他约束不变</span><br><span class="line"></span><br><span class="line">equalTo()       参数是对象类型，一般是视图对象或者mas_width这样的坐标系对象</span><br><span class="line">mas_equalTo()   和上面功能相同，参数可以传递基础数据类型对象，可以理解为比上面的API更强大</span><br><span class="line"></span><br><span class="line">width()         用来表示宽度，例如代表view的宽度</span><br><span class="line">mas_width()     用来获取宽度的值。和上面的区别在于，一个代表某个坐标系对象，一个用来获取坐标系对象的值</span><br></pre></td></tr></table></figure>
+<p><code>Masonry</code>为了让代码使用和阅读更容易理解，所以直接通过点语法就可以调用，还添加了<code>and</code>和<code>with</code>两个方法。这两个方法内部实际上什么都没干，只是在内部将<code>self</code>直接返回，功能就是为了更加方便阅读，对代码执行没有实际作用。<br>例如下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make.top.and.bottom.equalTo(self.containerView).with.offset(padding);</span><br></pre></td></tr></table></figure>
+<h4 id="更新约束和布局"><a href="#更新约束和布局" class="headerlink" title="更新约束和布局"></a>更新约束和布局</h4><p>关于更新约束布局相关的<code>API</code>，主要用以下四个<code>API</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)updateConstraintsIfNeeded  调用此方法，如果有标记为需要重新布局的约束，则立即进行重新布局，内部会调用updateConstraints方法</span><br><span class="line">- (void)updateConstraints          重写此方法，内部实现自定义布局过程</span><br><span class="line">- (BOOL)needsUpdateConstraints     当前是否需要重新布局，内部会判断当前有没有被标记的约束</span><br><span class="line">- (void)setNeedsUpdateConstraints  标记需要进行重新布局</span><br></pre></td></tr></table></figure>
+<p>代码示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">//需要先添加上再进行布局，不然会导致app崩溃</span><br><span class="line">[self.view addSubview:self.nameLable];</span><br><span class="line">   [self.view addSubview:self.nameTextField];</span><br><span class="line">   [self.view addSubview:self.passWordLabel];</span><br><span class="line">   [self.view addSubview:self.passwordTextField];</span><br><span class="line">   [self.view addSubview:self.greenView];</span><br><span class="line">    </span><br><span class="line">    [self.nameLable mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">        make.top.equalTo(self.view).with.offset(100);</span><br><span class="line">        make.left.equalTo(self.view).with.offset(20);</span><br><span class="line">        make.width.equalTo(@100);</span><br><span class="line">    &#125;];</span><br><span class="line">   </span><br><span class="line">   [self.nameTextField mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">       make.top.equalTo(self.nameLable);</span><br><span class="line">       make.left.equalTo(self.nameLable.mas_right).with.offset(10);</span><br><span class="line">       make.right.equalTo(self.view).with.offset(-20);</span><br><span class="line">       make.height.equalTo(@50);</span><br><span class="line">   &#125;];</span><br><span class="line">   </span><br><span class="line">   [self.passWordLabel mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">       make.top.equalTo(self.nameLable.mas_bottom).offset(10);</span><br><span class="line">       make.left.equalTo(self.nameLable);</span><br><span class="line">       make.width.equalTo(@70);</span><br><span class="line">   &#125;];</span><br><span class="line">   </span><br><span class="line">   [self.passwordTextField mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">       make.top.equalTo(self.passWordLabel);</span><br><span class="line">       make.left.equalTo(self.passWordLabel.mas_right).with.offset(10);</span><br><span class="line">       make.right.equalTo(self.view).with.offset(-20);</span><br><span class="line">   &#125;];</span><br><span class="line">   </span><br><span class="line">/**</span><br><span class="line"> * 更新</span><br><span class="line"> */</span><br><span class="line">   </span><br><span class="line">   // 设置greenView的center和size，这样就可以达到简单进行约束的目的</span><br><span class="line">   [self.greenView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">       make.center.equalTo(self.view);</span><br><span class="line">       // 这里通过mas_equalTo给size设置了基础数据类型的参数，参数为CGSize的结构体</span><br><span class="line">       make.size.mas_equalTo(CGSizeMake(300, 300));</span><br><span class="line">   &#125;];</span><br><span class="line">   </span><br><span class="line">   // 为了更清楚的看出约束变化的效果，在显示两秒后更新约束。</span><br><span class="line">   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">       // 指定更新size，其他约束不变。</span><br><span class="line">       [self.greenView mas_updateConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">           make.size.mas_equalTo(CGSizeMake(100, 100));</span><br><span class="line">       &#125;];</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure>
+<h6 id="设置内边距"><a href="#设置内边距" class="headerlink" title="设置内边距"></a>设置内边距</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/** </span><br><span class="line"> 设置yellow视图和self.view等大，并且有10的内边距。</span><br><span class="line"> 注意根据UIView的坐标系，下面right和bottom进行了取反。所以不能写成下面这样，否则right、bottom这两个方向会出现问题。</span><br><span class="line"> make.edges.equalTo(self.view).with.offset(10);</span><br><span class="line"> </span><br><span class="line"> 除了下面例子中的offset()方法，还有针对不同坐标系的centerOffset()、sizeOffset()、valueOffset()之类的方法。</span><br><span class="line"> */</span><br><span class="line">[self.yellowView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.left.equalTo(self.view).with.offset(10);</span><br><span class="line">    make.top.equalTo(self.view).with.offset(10);</span><br><span class="line">    make.right.equalTo(self.view).with.offset(-10);</span><br><span class="line">    make.bottom.equalTo(self.view).with.offset(-10);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h6 id="通过insets简化设置内边距的方式"><a href="#通过insets简化设置内边距的方式" class="headerlink" title="通过insets简化设置内边距的方式"></a>通过insets简化设置内边距的方式</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 下面的方法和上面例子等价，区别在于使用insets()方法。</span><br><span class="line">[self.blueView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    // 下、右不需要写负号，insets方法中已经为我们做了取反的操作了。</span><br><span class="line">    make.edges.equalTo(self.view).with.insets(UIEdgeInsetsMake(10, 10, 10, 10));</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h6 id="大于等于和小于等于某个值的约束"><a href="#大于等于和小于等于某个值的约束" class="headerlink" title="大于等于和小于等于某个值的约束"></a>大于等于和小于等于某个值的约束</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.center.equalTo(self.view);</span><br><span class="line">    // 设置宽度小于等于200</span><br><span class="line">    make.width.lessThanOrEqualTo(@200);</span><br><span class="line">    // 设置高度大于等于10</span><br><span class="line">    make.height.greaterThanOrEqualTo(@(10));</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">self.textLabel.text = @&quot;这是测试的字符串。能看到1、2、3个步骤，第一步当然是上传照片了，要上传正面近照哦。上传后，网站会自动识别你的面部，如果觉得识别的不准，你还可以手动修改一下。左边可以看到16项修改参数，最上面是整体修改，你也可以根据自己的意愿单独修改某项，将鼠标放到选项上面，右边的预览图会显示相应的位置。&quot;;</span><br></pre></td></tr></table></figure>
+<p><code>textLabel</code>只需要设置一个属性即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.textLabel.numberOfLines = 0;</span><br></pre></td></tr></table></figure>
+<h6 id="设置约束优先级"><a href="#设置约束优先级" class="headerlink" title="设置约束优先级"></a>设置约束优先级</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/** </span><br><span class="line"> Masonry为我们提供了三个默认的方法，priorityLow()、priorityMedium()、priorityHigh()，这三个方法内部对应着不同的默认优先级。</span><br><span class="line"> 除了这三个方法，我们也可以自己设置优先级的值，可以通过priority()方法来设置。</span><br><span class="line"> */</span><br><span class="line">[self.redView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.center.equalTo(self.view);</span><br><span class="line">    make.width.equalTo(self.view).priorityLow();</span><br><span class="line">    make.width.mas_equalTo(20).priorityHigh();</span><br><span class="line">    make.height.equalTo(self.view).priority(200);</span><br><span class="line">    make.height.mas_equalTo(100).priority(1000);</span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">Masonry也帮我们定义好了一些默认的优先级常量，分别对应着不同的数值，优先级最大数值是1000。</span><br><span class="line">static const MASLayoutPriority MASLayoutPriorityRequired = UILayoutPriorityRequired;</span><br><span class="line">static const MASLayoutPriority MASLayoutPriorityDefaultHigh = UILayoutPriorityDefaultHigh;</span><br><span class="line">static const MASLayoutPriority MASLayoutPriorityDefaultMedium = 500;</span><br><span class="line">static const MASLayoutPriority MASLayoutPriorityDefaultLow = UILayoutPriorityDefaultLow;</span><br><span class="line">static const MASLayoutPriority MASLayoutPriorityFittingSizeLevel = UILayoutPriorityFittingSizeLevel;</span><br></pre></td></tr></table></figure>
+<h6 id="设置约束比例"><a href="#设置约束比例" class="headerlink" title="设置约束比例"></a>设置约束比例</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 设置当前约束值乘以多少，例如这个例子是redView的宽度是self.view宽度的0.2倍。</span><br><span class="line">[self.redView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</span><br><span class="line">    make.center.equalTo(self.view);</span><br><span class="line">    make.height.mas_equalTo(30);</span><br><span class="line">    make.width.equalTo(self.view).multipliedBy(0.2);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/13/20180313/" rel="next" title="iOS11中UITextField的secureTextEntry设置为yes引发的问题">
+                <i class="fa fa-chevron-left"></i> iOS11中UITextField的secureTextEntry设置为yes引发的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/20180316/" rel="prev" title="有效解决在ScrollView上TextField不被键盘遮挡的问题">
+                有效解决在ScrollView上TextField不被键盘遮挡的问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#Masonry介绍"><span class="nav-number">1.</span> <span class="nav-text">Masonry介绍</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Masonry的使用"><span class="nav-number">2.</span> <span class="nav-text">Masonry的使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新约束和布局"><span class="nav-number"></span> <span class="nav-text">更新约束和布局</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#设置内边距"><span class="nav-number">1.</span> <span class="nav-text">设置内边距</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#通过insets简化设置内边距的方式"><span class="nav-number">2.</span> <span class="nav-text">通过insets简化设置内边距的方式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#大于等于和小于等于某个值的约束"><span class="nav-number">3.</span> <span class="nav-text">大于等于和小于等于某个值的约束</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#设置约束优先级"><span class="nav-number">4.</span> <span class="nav-text">设置约束优先级</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#设置约束比例"><span class="nav-number">5.</span> <span class="nav-text">设置约束比例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

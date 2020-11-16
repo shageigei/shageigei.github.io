@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="整体介绍​    runtime在开发中的应用大致分为几个方面：1.动态方法交换、2.类目添加新属性、3.获取类详细属性（包含：属性列表、成员变量列表、方法列表、协议列表）、4.解决同意方法高频调用的效率问题、5.动态方法解析与消息转发、6.动态操作属性（包含：修改私有属性、改进iOS归档和解档、实现字典与模型的转换）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RunTime-iOS运行时应用">
+<meta property="og:url" content="http://langg.top/2019/07/09/RunTime-iOS运行时应用/index.html">
+<meta property="og:site_name" content="Glang">
+<meta property="og:description" content="整体介绍​    runtime在开发中的应用大致分为几个方面：1.动态方法交换、2.类目添加新属性、3.获取类详细属性（包含：属性列表、成员变量列表、方法列表、协议列表）、4.解决同意方法高频调用的效率问题、5.动态方法解析与消息转发、6.动态操作属性（包含：修改私有属性、改进iOS归档和解档、实现字典与模型的转换）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://langg.top/2019/07/09/RunTime-iOS运行时应用/Runtime.png">
+<meta property="og:image" content="http://langg.top/2019/07/09/RunTime-iOS运行时应用/r_1.png">
+<meta property="og:image" content="http://langg.top/2019/07/09/RunTime-iOS运行时应用/dic_model.png">
+<meta property="og:updated_time" content="2019-08-29T07:30:15.098Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RunTime-iOS运行时应用">
+<meta name="twitter:description" content="整体介绍​    runtime在开发中的应用大致分为几个方面：1.动态方法交换、2.类目添加新属性、3.获取类详细属性（包含：属性列表、成员变量列表、方法列表、协议列表）、4.解决同意方法高频调用的效率问题、5.动态方法解析与消息转发、6.动态操作属性（包含：修改私有属性、改进iOS归档和解档、实现字典与模型的转换）">
+<meta name="twitter:image" content="http://langg.top/2019/07/09/RunTime-iOS运行时应用/Runtime.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'lang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://langg.top/2019/07/09/RunTime-iOS运行时应用/"/>
+
+
+
+
+
+  <title>RunTime-iOS运行时应用 | Glang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Glang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://langg.top/2019/07/09/RunTime-iOS运行时应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Glang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RunTime-iOS运行时应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-09T10:31:58+08:00">
+                2019-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h6 id="整体介绍"><a href="#整体介绍" class="headerlink" title="整体介绍"></a>整体介绍</h6><p>​    runtime在开发中的应用大致分为几个方面：1.动态方法交换、2.类目添加新属性、3.获取类详细属性（包含：属性列表、成员变量列表、方法列表、协议列表）、4.解决同意方法高频调用的效率问题、5.动态方法解析与消息转发、6.动态操作属性（包含：修改私有属性、改进iOS归档和解档、实现字典与模型的转换）</p>
+<a id="more"></a>
+<p>如图<img src="/2019/07/09/RunTime-iOS运行时应用/Runtime.png" height="400px"></p>
+<h5 id="一、动态方法交换：Method-Swizzling"><a href="#一、动态方法交换：Method-Swizzling" class="headerlink" title="一、动态方法交换：Method Swizzling"></a>一、动态方法交换：Method Swizzling</h5><p>实现动态方法交换（Method Swizzling）是Runtime中最具盛名的应用场景，其原理是：通过Runtime获取到方法的实现地址，进而动态交换两个方法的功能，使用的关键方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//动态方法交换</span><br><span class="line">    //1.获取类方法的method</span><br><span class="line">    Method _Nullable class_getClassMethod(Class _Nullable cls, SEL _Nonnull name);</span><br><span class="line">    //2.获取实例对象方法的method</span><br><span class="line">    Method _Nullable class_getInstanceMethod(Class _Nullable cls, SEL _Nonnull name);</span><br><span class="line">    //交换2个方法的实现</span><br><span class="line">    void method_exchangeImplementations(Method _Nonnull m1, Method _Nonnull m2);</span><br></pre></td></tr></table></figure>
+<h6 id="1-动态方法交换示例"><a href="#1-动态方法交换示例" class="headerlink" title="1.动态方法交换示例"></a>1.动态方法交换示例</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    //方法交换</span><br><span class="line">    [self changeMethod];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)changeMethod&#123;</span><br><span class="line">    //开始打印</span><br><span class="line">    [self method1];</span><br><span class="line">    [self method2];</span><br><span class="line">    //方法获取</span><br><span class="line">    Method methodA = class_getInstanceMethod([self class], @selector(method1));</span><br><span class="line">    Method methodB = class_getInstanceMethod([self class], @selector(method2));</span><br><span class="line">    //方法交换</span><br><span class="line">    method_exchangeImplementations(methodA, methodB);</span><br><span class="line">    //结束后打印</span><br><span class="line">    [self method1];</span><br><span class="line">    [self method2];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)method1&#123;</span><br><span class="line">    NSLog(@&quot;方法1&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)method2&#123;</span><br><span class="line">    NSLog(@&quot;方法2&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 11:29:59.505083+0800 RunTimeDemo[9866:459746] 方法1</span><br><span class="line">2019-07-09 11:29:59.505292+0800 RunTimeDemo[9866:459746] 方法2</span><br><span class="line">2019-07-09 11:29:59.506224+0800 RunTimeDemo[9866:459746] 方法2</span><br><span class="line">2019-07-09 11:29:59.506356+0800 RunTimeDemo[9866:459746] 方法1</span><br></pre></td></tr></table></figure>
+<p>可以看到，开始打印的结果为各自方法的实现功能，经过方法交换后，method1实现的功能为method的功能。即进行了动态方法交换。</p>
+<h6 id="2-拦截并替换系统方法"><a href="#2-拦截并替换系统方法" class="headerlink" title="2.拦截并替换系统方法"></a>2.拦截并替换系统方法</h6><p>Runtime动态方法交换更多的是应用于系统类库和第三方框架的方法的替换，在不可见源码的情况下，我们可以借助Runtime交换方法实现，为原有方法添加额外功能。这样在实际开发中具有十分重要的意义。</p>
+<p>举例：为了实现不同机型上的字体都按照比例适配，我们可以拦截系统UIFont的systemFontOfSize方法，具体操作如下：</p>
+<ul>
+<li><p>在当前工程中添加UIFont的分类：UIFont+Adapt,并在其中添用以替换的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (UIFont *)gl_systemFontOfSize:(CGFloat)fontSize&#123;</span><br><span class="line">    //获取设备屏幕宽度，并计算出比例scale</span><br><span class="line">    CGFloat width = [[UIScreen mainScreen] bounds].size.width;</span><br><span class="line">    CGFloat scale = width/375.f;</span><br><span class="line">    //注意：由于方法交换，系统的方法名已变成了自定义的方法名，所以这里使用了</span><br><span class="line">    //自定义的方法名来获取UIFont</span><br><span class="line">    return [self gl_systemFontOfSize:fontSize * scale];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在UIFont的分类中拦截系统方法，将其替换为我们的自定义方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//load方法不需要手动调用，iOS会在应用程序启动的时候自动调起load方法，</span><br><span class="line">//而且执行时间较早，所以在此方法中执行交换操作比较合适。</span><br><span class="line">+(void)load&#123;</span><br><span class="line">    </span><br><span class="line">    //获取系统方法地址</span><br><span class="line">    Method systemMethod = class_getClassMethod([UIFont class], @selector(systemFontOfSize:));</span><br><span class="line">    //获取自定义方法地址</span><br><span class="line">    Method customMethod = class_getClassMethod([UIFont class], @selector(gl_systemFontOfSize:));</span><br><span class="line">    //交换2个方法实现</span><br><span class="line">    method_exchangeImplementations(systemMethod, customMethod);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在外部需要用到的地方引用这个分类，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 300, 50)];</span><br><span class="line">label.text = @&quot;测试Runtime拦截方法&quot;;</span><br><span class="line">label.font = [UIFont systemFontOfSize:20];</span><br><span class="line">[self.view addSubview:label];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="二、实现分类添加新属性"><a href="#二、实现分类添加新属性" class="headerlink" title="二、实现分类添加新属性"></a>二、实现分类添加新属性</h5><p>​    我们在开发中常常使用类目Category为一些已有的类扩展功能。虽然继承也能够为已有类增加新的方法，而且相比类目更是具有增加属性的优势，但是继承毕竟是一个重量级的操作，添加不必要的继承关系无疑增加了代码的复杂度。遗憾的是，OC的类目并不支持直接添加属性，如果我们直接在分类的声明中写入Property属性，那么只能为其生成set与get方法声明，却不能生成成员变量，直接调用这些属性还会造成崩溃。</p>
+<p>​    所以为了实现给分类添加属性，我们还需借助Runtime的<strong>关联对象(Associated Objects)</strong>特性，它能够帮助我们在运行阶段将任意的属性关联到一个对象上，下面是相关的三个方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    1.给对象设置关联属性</span><br><span class="line">    @param object    设置需要关联属性的对象，即给哪个对象关联属性</span><br><span class="line">    @param key 关联属性对应的key，可根据key获取到这个属性</span><br><span class="line">    @param value 给关联属性设置的值</span><br><span class="line">    @param policy 关联属性的存储策略(对应Property属性中的assign,copy，retain等)</span><br><span class="line">    OBJC_ASSOCIATION_ASSIGN             @property(assign)。</span><br><span class="line">    OBJC_ASSOCIATION_RETAIN_NONATOMIC   @property(strong, nonatomic)。</span><br><span class="line">    OBJC_ASSOCIATION_COPY_NONATOMIC     @property(copy, nonatomic)。</span><br><span class="line">    OBJC_ASSOCIATION_RETAIN             @property(strong,atomic)。</span><br><span class="line">    OBJC_ASSOCIATION_COPY               @property(copy, atomic)。</span><br><span class="line">    */</span><br><span class="line">   </span><br><span class="line">   void objc_setAssociatedObject(id _Nonnull object,</span><br><span class="line">                                 const void *_Nonnull key,</span><br><span class="line">                                 id _Nullable value,</span><br><span class="line">                                 objc_AssociationPolicy policy);</span><br><span class="line">   </span><br><span class="line">   /**</span><br><span class="line">    2.通过key获取关联的属性</span><br><span class="line">    @param object 从哪个对象中获取关联属性</span><br><span class="line">    @param key 关联属性对应的key</span><br><span class="line">    @return 返回关联属性的值</span><br><span class="line">    */</span><br><span class="line">   </span><br><span class="line">   id _Nullable objc_getAssociatedObject(id _Nonnull object,</span><br><span class="line">                                         const void *_Nonnull key);</span><br><span class="line">   </span><br><span class="line">   /**</span><br><span class="line">    3.移除对象所关联的属性</span><br><span class="line">    @param object 移除某个对象的所有关联属性</span><br><span class="line">    */</span><br><span class="line">   void removeAssociatedObjects(id _Nonnull object);</span><br></pre></td></tr></table></figure>
+<p>注意：key与关联属性一一对应，我们必须确保其全局唯一性，经常我们使用@selector(methodName)作为key。</p>
+<p>代码示例：为UIImage增加一个分类：UIImage+Tools，并为其设置关联属性urlString(图片网络链接属性），相关代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_BEGIN</span><br><span class="line"></span><br><span class="line">@interface UIImage (Tools)</span><br><span class="line"></span><br><span class="line">//添加一个新属性</span><br><span class="line">@property (nonatomic, copy) NSString *urlString;</span><br><span class="line"></span><br><span class="line">- (void)cleanAssociatedObjcet;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">NS_ASSUME_NONNULL_END</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">#import &quot;UIImage+Tools.h&quot;</span><br><span class="line">#import &lt;objc/runtime.h&gt;</span><br><span class="line"></span><br><span class="line">@implementation UIImage (Tools)</span><br><span class="line"></span><br><span class="line">- (void)setUrlString:(NSString *)urlString&#123;</span><br><span class="line">    objc_setAssociatedObject(self, @selector(urlString), urlString, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSString *)urlString&#123;</span><br><span class="line">    </span><br><span class="line">    return objc_getAssociatedObject(self, @selector(urlString));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//添加一个自定义方法，用于清除所有的关联属性</span><br><span class="line">- (void)cleanAssociatedObjcet&#123;</span><br><span class="line">    objc_removeAssociatedObjects(self);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (void)addAssociatedObjects&#123;</span><br><span class="line">    UIImage *img = [[UIImage alloc] init];</span><br><span class="line">    img.urlString = @&quot;这是在类别中新增的属性&quot;;</span><br><span class="line">    NSLog(@&quot;获取关联属性：%@&quot;,img.urlString);</span><br><span class="line">    </span><br><span class="line">    [img cleanAssociatedObjcet];</span><br><span class="line">    NSLog(@&quot;获取关联属性：%@&quot;,img.urlString);</span><br><span class="line">&#125;</span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 14:27:08.604029+0800 RunTimeDemo[11418:555477] 获取关联属性：这是在类别中新增的属性</span><br><span class="line">2019-07-09 14:27:08.604191+0800 RunTimeDemo[11418:555477] 获取关联属性：(null)</span><br></pre></td></tr></table></figure>
+<h5 id="三、获取类的详细信息"><a href="#三、获取类的详细信息" class="headerlink" title="三、获取类的详细信息"></a>三、获取类的详细信息</h5><ul>
+<li>获取属性列表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">.h文件中</span><br><span class="line">  </span><br><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line"></span><br><span class="line">@interface ViewController : UIViewController</span><br><span class="line"></span><br><span class="line">@property (nonatomic, copy) NSString *type;</span><br><span class="line">@property (nonatomic, strong) NSMutableArray *dataSources;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line">  </span><br><span class="line">.m文件中</span><br><span class="line"> </span><br><span class="line">//获取属性列表</span><br><span class="line">- (void)getProperts&#123;</span><br><span class="line">    unsigned int count;</span><br><span class="line">    objc_property_t *propertyLists = class_copyPropertyList([self class], &amp;count);</span><br><span class="line">    for (unsigned int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        const char *propertyName = property_getName(propertyLists[i]);</span><br><span class="line">        NSLog(@&quot;PropertyName(%d): %@&quot;,i,[NSString stringWithUTF8String:propertyName]);</span><br><span class="line">    &#125;</span><br><span class="line">    free(propertyLists);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 14:41:17.970862+0800 RunTimeDemo[11580:566293] PropertyName(0): type</span><br><span class="line">2019-07-09 14:41:17.971003+0800 RunTimeDemo[11580:566293] PropertyName(1): dataSources</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>获取所有成员变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@interface ViewController ()</span><br><span class="line">&#123;</span><br><span class="line">    NSInteger index;</span><br><span class="line">    NSString *webStr;</span><br><span class="line">    UIImageView *imgView;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  //获取所有成员变量</span><br><span class="line">- (void)getIvarList&#123;</span><br><span class="line">    unsigned int count;</span><br><span class="line">    Ivar *ivarList = class_copyIvarList([self class], &amp;count);</span><br><span class="line">    for (unsigned int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        Ivar ivar = ivarList[i];</span><br><span class="line">        const char *ivarName = ivar_getName(ivar);</span><br><span class="line">         NSLog(@&quot;Ivar(%d): %@&quot;, i, [NSString stringWithUTF8String:ivarName]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 14:48:33.153016+0800 RunTimeDemo[11654:572288] Ivar(0): index</span><br><span class="line">2019-07-09 14:48:33.153200+0800 RunTimeDemo[11654:572288] Ivar(1): webStr</span><br><span class="line">2019-07-09 14:48:33.153310+0800 RunTimeDemo[11654:572288] Ivar(2): imgView</span><br><span class="line">2019-07-09 14:48:33.153412+0800 RunTimeDemo[11654:572288] Ivar(3): _type</span><br><span class="line">2019-07-09 14:48:33.153578+0800 RunTimeDemo[11654:572288] Ivar(4): _dataSource</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取所有方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">//获取所有方法</span><br><span class="line">- (void)getMethodList&#123;</span><br><span class="line">    unsigned int count;</span><br><span class="line">    Method *methodList = class_copyMethodList([self class], &amp;count);</span><br><span class="line">    </span><br><span class="line">    for (unsigned int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        Method method = methodList[i];</span><br><span class="line">        SEL methodName = method_getName(method);</span><br><span class="line">        NSLog(@&quot;MethodName(%d): %@&quot;,i,NSStringFromSelector(methodName));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 14:55:45.149562+0800 RunTimeDemo[11737:578242] MethodName(0): getMethodList</span><br><span class="line">2019-07-09 14:55:45.149702+0800 RunTimeDemo[11737:578242] MethodName(1): method1</span><br><span class="line">2019-07-09 14:55:45.149796+0800 RunTimeDemo[11737:578242] MethodName(2): method2</span><br><span class="line">2019-07-09 14:55:45.149875+0800 RunTimeDemo[11737:578242] MethodName(3): changeMethod</span><br><span class="line">2019-07-09 14:55:45.149948+0800 RunTimeDemo[11737:578242] MethodName(4): changeFontByDevice</span><br><span class="line">2019-07-09 14:55:45.150028+0800 RunTimeDemo[11737:578242] MethodName(5): Associated</span><br><span class="line">2019-07-09 14:55:45.150096+0800 RunTimeDemo[11737:578242] MethodName(6): addAssociatedObjects</span><br><span class="line">2019-07-09 14:55:45.150188+0800 RunTimeDemo[11737:578242] MethodName(7): getProperts</span><br><span class="line">2019-07-09 14:55:45.150283+0800 RunTimeDemo[11737:578242] MethodName(8): getIvarList</span><br><span class="line">2019-07-09 14:55:45.150371+0800 RunTimeDemo[11737:578242] MethodName(9): runTimeTest</span><br><span class="line">2019-07-09 14:55:45.150515+0800 RunTimeDemo[11737:578242] MethodName(10): performSelectorFuc</span><br><span class="line">2019-07-09 14:55:45.150718+0800 RunTimeDemo[11737:578242] MethodName(11): addProperty</span><br><span class="line">2019-07-09 14:55:45.150892+0800 RunTimeDemo[11737:578242] MethodName(12): writeFile</span><br><span class="line">2019-07-09 14:55:45.151103+0800 RunTimeDemo[11737:578242] MethodName(13): readFile</span><br><span class="line">2019-07-09 14:55:45.151307+0800 RunTimeDemo[11737:578242] MethodName(14): setDataSources:</span><br><span class="line">2019-07-09 14:55:45.151539+0800 RunTimeDemo[11737:578242] MethodName(15): .cxx_destruct</span><br><span class="line">2019-07-09 14:55:45.158302+0800 RunTimeDemo[11737:578242] MethodName(16): setType:</span><br><span class="line">2019-07-09 14:55:45.158425+0800 RunTimeDemo[11737:578242] MethodName(17): type</span><br><span class="line">2019-07-09 14:55:45.158512+0800 RunTimeDemo[11737:578242] MethodName(18): viewWillAppear:</span><br><span class="line">2019-07-09 14:55:45.158596+0800 RunTimeDemo[11737:578242] MethodName(19): viewDidLoad</span><br><span class="line">2019-07-09 14:55:45.158714+0800 RunTimeDemo[11737:578242] MethodName(20): didReceiveMemoryWarning</span><br><span class="line">2019-07-09 14:55:45.158801+0800 RunTimeDemo[11737:578242] MethodName(21): dataSources</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取当前遵循的所有协议</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@interface ViewController ()&lt;UITableViewDelegate&gt;</span><br><span class="line">&#123;</span><br><span class="line">    NSInteger index;</span><br><span class="line">    NSString *webStr;</span><br><span class="line">    UIImageView *imgView;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>//获取当前遵循的所有协议</p>
+<ul>
+<li><p>(void)getProtocalList{</p>
+<p>  unsigned int count;<br>  __unsafe_unretained Protocol **protocalList = class_copyProtocolList([self class], &amp;count);<br>  for (int i = 0; i &lt; count; i++) {</p>
+<pre><code>Protocol *protocal = protocalList[i];
+const char *protocalName = protocol_getName(protocal);
+NSLog(@&quot;protocol(%d): %@&quot;,i, [NSString stringWithUTF8String:protocalName]);
+</code></pre><p>  }<br>  free(protocalList);</p>
+<pre><code>}
+</code></pre></li>
+</ul>
+<p>//打印结果为：<br>2019-07-09 15:08:37.883237+0800 RunTimeDemo[11918:589653] protocol(0): UITableViewDelegate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  **注意：C语言中使用Copy操作的方法，要注意释放指针，防止内存泄漏**</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##### 四、解决同一方法高频率调用的效率问题</span><br><span class="line"></span><br><span class="line">Runtime源码中的IMP作为函数指针，指向方法的实现。通过它，我们可以绕开发送消息的过程来提高函数调用的效率。当我们需要持续大量重复调用某个方法的时候，会十分有用，具体代码示例如下：</span><br><span class="line"></span><br><span class="line">​```objective-c</span><br><span class="line">void (*setter)(id, SEL, BOOL);</span><br><span class="line">int i;</span><br><span class="line"></span><br><span class="line">setter = (void (*)(id, SEL, BOOL))[target methodForSelector:@selector(setFilled:)];</span><br><span class="line">for ( i = 0 ; i &lt; 1000 ; i++ )&#123;</span><br><span class="line">  setter(targetList[i], @selector(setFilled:), YES);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="五、方法动态解析与消息转发"><a href="#五、方法动态解析与消息转发" class="headerlink" title="五、方法动态解析与消息转发"></a>五、方法动态解析与消息转发</h5><p><strong>运行时阶段的消息发送的详细步骤如下</strong>：</p>
+<ol>
+<li><p>检测selector 是不是需要忽略的。比如 Mac OS X 开发，有了垃圾回收就不理会retain,release 这些函数了。</p>
+</li>
+<li><p>检测target 是不是nil 对象。ObjC 的特性是允许对一个 nil对象执行任何一个方法不会 Crash，因为会被忽略掉。</p>
+</li>
+<li><p>如果上面两个都过了，那就开始查找这个类的 IMP，先从 cache 里面找，若可以找得到就跳到对应的函数去执行。</p>
+</li>
+<li><p>如果在cache里找不到就找一下方法列表methodLists。</p>
+</li>
+<li><p>如果methodLists找不到，就到超类的方法列表里寻找，一直找，直到找到NSObject类为止。</p>
+</li>
+<li><p>如果还找不到，Runtime就提供了如下三种方法来处理：<strong>动态方法解析</strong>、<strong>消息接受者重定向</strong>、<strong>消息重定向</strong>，这三种方法的调用关系如下图：</p>
+<p><img src="/2019/07/09/RunTime-iOS运行时应用/r_1.png" height="300px"></p>
+</li>
+</ol>
+<h4 id="1-动态方法解析-Dynamic-Method-Resolution"><a href="#1-动态方法解析-Dynamic-Method-Resolution" class="headerlink" title="1.动态方法解析(Dynamic Method Resolution)"></a>1.动态方法解析(Dynamic Method Resolution)</h4><p>所谓动态解析，我们可以理解为通过cache和方法列表没有找到方法时，Runtime为我们提供一次动态添加方法实现的机会，主要用到的方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//OC方法：</span><br><span class="line">//类方法未找到时调起，可于此添加类方法实现</span><br><span class="line">+ (BOOL)resolveClassMethod:(SEL)sel</span><br><span class="line">//实例方法未找到时调起，可于此添加实例方法实现</span><br><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</span><br><span class="line"></span><br><span class="line">//Runtime方法：</span><br><span class="line">/**</span><br><span class="line"> 运行时方法：向指定类中添加特定方法实现的操作</span><br><span class="line"> @param cls 被添加方法的类</span><br><span class="line"> @param name selector方法名</span><br><span class="line"> @param imp 指向实现方法的函数指针</span><br><span class="line"> @param types imp函数实现的返回值与参数类型</span><br><span class="line"> @return 添加方法是否成功</span><br><span class="line"> */</span><br><span class="line">BOOL class_addMethod(Class _Nullable cls,</span><br><span class="line">                     SEL _Nonnull name,</span><br><span class="line">                     IMP _Nonnull imp,</span><br><span class="line">                     const char * _Nullable types</span><br></pre></td></tr></table></figure>
+<p>下面使用一个示例来说明动态解析：Perosn类中声明方法却未添加实现，我们通过Runtime动态方法解析的操作为其他添加方法实现，具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//Person.h文件</span><br><span class="line"></span><br><span class="line">@interface Person : NSObject</span><br><span class="line">//声明类方法，但未实现</span><br><span class="line">+ (void)haveMeal:(NSString *)food;</span><br><span class="line">//声明实例方法，但未实现</span><br><span class="line">- (void)singSong:(NSString *)name;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//Person.m文件</span><br><span class="line"></span><br><span class="line">#import &quot;Person.h&quot;</span><br><span class="line">#import &lt;objc/runtime.h&gt;</span><br><span class="line">@implementation Person</span><br><span class="line">//重写父类方法：处理类方法</span><br><span class="line">+ (BOOL)resolveClassMethod:(SEL)sel&#123;</span><br><span class="line">    if(sel == @selector(haveMeal:))&#123;</span><br><span class="line">        class_addMethod(object_getClass(self), sel, class_getMethodImplementation(object_getClass(self), @selector(zs_haveMeal:)), &quot;v@&quot;);</span><br><span class="line">        return YES;   //添加函数实现，返回YES</span><br><span class="line">    &#125;</span><br><span class="line">    return [class_getSuperclass(self) resolveClassMethod:sel];</span><br><span class="line">&#125;</span><br><span class="line">//重写父类方法：处理实例方法</span><br><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel&#123;</span><br><span class="line">    if(sel == @selector(singSong:))&#123;</span><br><span class="line">        class_addMethod([self class], sel, class_getMethodImplementation([self class], @selector(zs_singSong:)), &quot;v@&quot;);</span><br><span class="line">        return YES;</span><br><span class="line">    &#125;</span><br><span class="line">    return [super resolveInstanceMethod:sel];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">+ (void)zs_haveMeal:(NSString *)food&#123;</span><br><span class="line">    NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)zs_singSong:(NSString *)name&#123;</span><br><span class="line">    NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//TestViewController.m文件</span><br><span class="line">//测试：Peson调用并未实现的类方法、实例方法，并没有崩溃</span><br><span class="line">Person *ps = [[Person alloc] init];</span><br><span class="line">[Person haveMeal:@&quot;Apple&quot;]; //打印：+[Person zs_haveMeal:]</span><br><span class="line">[ps singSong:@&quot;纸短情长&quot;];   //打印：-[Person zs_singSong:]</span><br></pre></td></tr></table></figure>
+<p>注意1：我们注意到class_addMethod方法中的特殊参数“v@”，具体可参考<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html#//apple_ref/doc/uid/TP40008048-CH100" target="_blank" rel="noopener">这里</a><br>注意2：成功使用动态方法解析还有个前提，那就是我们必须存在可以处理消息的方法，比如上述代码中的zs_haveMeal：与zs_singSong：</p>
+<h4 id="2-消息接收者重定向"><a href="#2-消息接收者重定向" class="headerlink" title="2.消息接收者重定向"></a>2.消息接收者重定向</h4><p>我们注意到动态方法解析过程中的两个resolve方法都返回了布尔值，当它们返回YES时方法即可正常执行，但是若它们返回NO，消息发送机制就进入了消息转发(Forwarding)的阶段了，我们可以使用Runtime通过下面的方法替换消息接收者的为其他对象，从而保证程序的继续执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//重定向类方法的消息接收者，返回一个类</span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector</span><br><span class="line"></span><br><span class="line">//重定向实例方法的消息接受者，返回一个实例对象</span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector</span><br></pre></td></tr></table></figure>
+<p>下面使用一个示例来说明消息接收者的重定向：<br>我们创建一个Student类，声明并实现takeExam：、learnKnowledge：两个方法，然后在视图控制器TestViewController(一个继承了UIViewController的自定义类)里测试，关键代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//Student.h文件</span><br><span class="line"></span><br><span class="line">@interface Student : NSObject</span><br><span class="line">//类方法：参加考试</span><br><span class="line">+ (void)takeExam:(NSString *)exam;</span><br><span class="line">//实例方法：学习知识</span><br><span class="line">- (void)learnKnowledge:(NSString *)course;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//  Student.m文件</span><br><span class="line"></span><br><span class="line">@implementation Student</span><br><span class="line">+ (void)takeExam:(NSString *)exam&#123;</span><br><span class="line">    NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br><span class="line">- (void)learnKnowledge:(NSString *)course&#123;</span><br><span class="line">    NSLog(@&quot;%s&quot;,__func__);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">//TestViewConroller.m文件</span><br><span class="line">//重定向类方法：返回一个类对象</span><br><span class="line">+ (id)forwardingTargetForSelector:(SEL)aSelector&#123;</span><br><span class="line">    if (aSelector == @selector(takeExam:)) &#123;</span><br><span class="line">         </span><br><span class="line">        return [Student class];</span><br><span class="line">    &#125;</span><br><span class="line">    return [super forwardingTargetForSelector:aSelector];</span><br><span class="line">&#125;</span><br><span class="line">//重定向实例方法：返回类的实例</span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector&#123;</span><br><span class="line">    if (aSelector == @selector(learnKnowledge:)) &#123;</span><br><span class="line">        return self.student;</span><br><span class="line">    &#125;</span><br><span class="line">    return [super forwardingTargetForSelector:aSelector];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//在TestViewConroller的viewDidLoad中测试：</span><br><span class="line">//调用并未声明和实现的类方法</span><br><span class="line">[TestViewController performSelector:@selector(takeExam:) withObject:@&quot;语文&quot;];</span><br><span class="line"></span><br><span class="line">//调用并未声明和实现的类方法</span><br><span class="line">self.student = [[Student alloc] init];</span><br><span class="line">[self performSelector:@selector(learnKnowledge:) withObject:@&quot;天文学知识&quot;];</span><br><span class="line"></span><br><span class="line">//正常打印:</span><br><span class="line">// +[Student takeExam:]</span><br><span class="line">// -[Student learnKnowledge:]</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：动态方法解析阶段返回NO时，我们可以通过forwardingTargetForSelector可以修改消息的接收者，该方法返回参数是一个对象，如果这个对象是非nil，非self，系统会将运行的消息转发给这个对象执行。否则，继续查找其他流程。</p>
+<h4 id="3-消息重定向"><a href="#3-消息重定向" class="headerlink" title="3.消息重定向"></a>3.消息重定向</h4><p>当以上两种方法无法生效，那么这个对象会因为找不到相应的方法实现而无法响应消息，此时Runtime系统会通过forwardInvocation：消息通知该对象，给予此次消息发送最后一次寻找IMP的机会：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)forwardInvocation:(NSInvocation *)anInvocation；</span><br></pre></td></tr></table></figure>
+<p>其实每个对象都从NSObject类中继承了forwardInvocation：方法，但是NSObject中的这个方法只是简单的调用了doesNotRecongnizeSelector:方法，提示我们错误。所以我们可以重写这个方法：对不能处理的消息做一些默认处理，也可以将消息转发给其他对象来处理，而不抛出错误。</p>
+<p>我们注意到anInvocation是forwardInvocation唯一参数，它封装了原始的消息和消息参数。正是因为它，我们还不得不重写另一个函数：methodSignatureForSelector。这是因为在forwardInvocation: 消息发送前，Runtime系统会向对象发送methodSignatureForSelector消息，并取到返回的方法签名用于生成NSInvocation对象。</p>
+<p>下面使用一个示例来重新定义转发逻辑：在上面的TestViewController添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">-(void)forwardInvocation:(NSInvocation *)anInvocation&#123;</span><br><span class="line">    //1.从anInvocation中获取消息</span><br><span class="line">    SEL sel = anInvocation.selector;</span><br><span class="line">    //2.判断Student方法是否可以响应应sel</span><br><span class="line">    if ([self.student respondsToSelector:sel]) &#123;</span><br><span class="line">        //2.1若可以响应，则将消息转发给其他对象处理</span><br><span class="line">        [anInvocation invokeWithTarget:self.student];</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        //2.2若仍然无法响应，则报错：找不到响应方法</span><br><span class="line">        [self doesNotRecognizeSelector:sel];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//需要从这个方法中获取的信息来创建NSInvocation对象，因此我们必须重写这个方法，为给定的selector提供一个合适的方法签名。</span><br><span class="line">- (NSMethodSignature*)methodSignatureForSelector:(SEL)aSelector&#123;</span><br><span class="line">    NSMethodSignature *methodSignature = [super methodSignatureForSelector:aSelector];</span><br><span class="line">    if (!methodSignature) &#123;</span><br><span class="line">        methodSignature = [NSMethodSignature signatureWithObjCTypes:&quot;v@:*&quot;];</span><br><span class="line">    &#125;</span><br><span class="line">    return methodSignature;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再在视图控制器里直接调用Student的方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//self是当前的TestViewController,调用了自己并不存在的learnKonwledge:方法</span><br><span class="line">[self performSelector:@selector(learnKnowledge:) withObject:@&quot;天文学”];</span><br><span class="line"></span><br><span class="line">//正常打印:</span><br><span class="line">//-[Student learnKnowledge:]</span><br></pre></td></tr></table></figure>
+<h5 id="六、动态操作属性"><a href="#六、动态操作属性" class="headerlink" title="六、动态操作属性"></a>六、动态操作属性</h5><h4 id="1-动态修改属性变量"><a href="#1-动态修改属性变量" class="headerlink" title="1.动态修改属性变量"></a>1.动态修改属性变量</h4><p>现在假设这样一个情况：我们使用第三方框架里的Person类，在特殊需求下想要更改其私有属性nickName，这样的操作我们就可以使用Runtime可以动态修改对象属性。</p>
+<p>基本思路：首先使用Runtime获取Peson对象的所有属性，找到nickName，然后使用ivar的方法修改其值。具体的代码示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Person *ps = [[Person alloc] init];</span><br><span class="line">NSLog(@&quot;ps-nickName: %@&quot;,[ps valueForKey:@&quot;nickName&quot;]); //null</span><br><span class="line">//第一步：遍历对象的所有属性</span><br><span class="line">unsigned int count;</span><br><span class="line">Ivar *ivarList = class_copyIvarList([ps class], &amp;count);</span><br><span class="line">for (int i= 0; i&lt;count; i++) &#123;</span><br><span class="line">    //第二步：获取每个属性名</span><br><span class="line">    Ivar ivar = ivarList[i];</span><br><span class="line">    const char *ivarName = ivar_getName(ivar);</span><br><span class="line">    NSString *propertyName = [NSString stringWithUTF8String:ivarName];</span><br><span class="line">    if ([propertyName isEqualToString:@&quot;_nickName&quot;]) &#123;</span><br><span class="line">        //第三步：匹配到对应的属性，然后修改；注意属性带有下划线</span><br><span class="line">        object_setIvar(ps, ivar, @&quot;梧雨北辰&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">NSLog(@&quot;ps-nickName: %@&quot;,[ps valueForKey:@&quot;nickName&quot;]); //梧雨北辰</span><br></pre></td></tr></table></figure>
+<p>总结：此过程类似KVC的取值和赋值</p>
+<ul>
+<li><p>归档和解档</p>
+<p>请查看<a href="http://langg.top/2018/04/12/20180412/">这里</a></p>
+</li>
+</ul>
+<ul>
+<li><p>字典转模型</p>
+<p>字典数据转模型的操作在项目开发中很常见，通常我们会选择第三方如YYModel\MJExtension；其实我们也可以自己来实现这一功能，主要的思路有两种：KVC、Runtime，总结字典转化模型过程中需要解决的问题如下：</p>
+<p><img src="/2019/07/09/RunTime-iOS运行时应用/dic_model.png" height="300px"></p>
+</li>
+</ul>
+<p>现在，我们使用Runtime来实现字典转模型的操作，大致的思路是这样:</p>
+<p><strong>借助Runtime可以动态获取成员列表的特性，遍历模型中所有属性，然后以获取到的属性名为key，在json中寻找对应的值value；再将每一个对应的value赋值给模型，就完成了字典转模型的目的</strong></p>
+<p>首先准备下面的JSON数据用于测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;id&quot;:&quot;123456&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;测试数据&quot;,</span><br><span class="line">    &quot;age&quot;:&quot;18&quot;,</span><br><span class="line">    &quot;weight&quot;:140,</span><br><span class="line">    &quot;address&quot;:&#123;</span><br><span class="line">            &quot;country&quot;:&quot;中国&quot;,</span><br><span class="line">            &quot;province&quot;: &quot;河南&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">    &quot;courses&quot;:[&#123;</span><br><span class="line">               &quot;name&quot;:&quot;Chinese&quot;,</span><br><span class="line">               &quot;desc&quot;:&quot;语文课&quot;</span><br><span class="line">    &#125;,&#123;</span><br><span class="line">               &quot;name&quot;:&quot;Math&quot;,</span><br><span class="line">               &quot;desc&quot;:&quot;数学课&quot;</span><br><span class="line">    &#125;,&#123;</span><br><span class="line">               &quot;name&quot;:&quot;English&quot;,</span><br><span class="line">               &quot;desc&quot;:&quot;英语课&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的代码实现流程如下：</p>
+<p><strong>步骤1：创建NSObject的类目NSObject+GLModel，用于实现字典转模型</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">.h文件</span><br><span class="line">//GLModel协议，协议方法可以返回一个字典，表明特殊字段的处理规则</span><br><span class="line">@protocol GLModel&lt;NSObject&gt;</span><br><span class="line">@optional</span><br><span class="line">+ (nullable NSDictionary&lt;NSString *, id&gt; *)modelContainerPropertyGenericClass;</span><br><span class="line">@end;</span><br><span class="line"></span><br><span class="line">@interface NSObject (GLModel)</span><br><span class="line"></span><br><span class="line">+ (instancetype)gl_modelWithDictionary:(NSDictionary *)dictionary;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.m文件</span><br><span class="line"></span><br><span class="line">+ (instancetype)gl_modelWithDictionary:(NSDictionary *)dictionary&#123;</span><br><span class="line">    </span><br><span class="line">    //创建当前模型对象</span><br><span class="line">    id obj = [[self alloc] init];</span><br><span class="line">    </span><br><span class="line">    //1.获取当前对象的成员变量列表</span><br><span class="line">    unsigned int count = 0;</span><br><span class="line">    Ivar *ivarList = class_copyIvarList([self class], &amp;count);</span><br><span class="line">    </span><br><span class="line">    //2.遍历ivarList中所有成员变量，以其属性名为key，在字典中查找Value</span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        //2.1获取成员属性</span><br><span class="line">        Ivar ivar = ivarList[i];</span><br><span class="line">        NSString *ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];</span><br><span class="line">        //2.2截取成员变量名：去掉成员变量前面的&quot;_&quot;号</span><br><span class="line">        NSString *propertyName = [ivarName substringFromIndex:1];</span><br><span class="line">        //2.3以属性名为key，在字典中查找value</span><br><span class="line">        id value = dictionary[propertyName];</span><br><span class="line">        </span><br><span class="line">        //3.获取成员变量类型, 因为ivar_getTypeEncoding获取的类型是&quot;@\&quot;NSString\&quot;&quot;的形式</span><br><span class="line">        //所以我们要做以下的替换</span><br><span class="line">         NSString *ivarType = [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)];// 替换:</span><br><span class="line">        //3.1去除转义字符：@\&quot;name\&quot; -&gt; @&quot;name&quot;</span><br><span class="line">        ivarType = [ivarType stringByReplacingOccurrencesOfString:@&quot;\&quot;&quot; withString:@&quot;&quot;];</span><br><span class="line">        //3.2去除@符号</span><br><span class="line">        ivarType = [ivarType stringByReplacingOccurrencesOfString:@&quot;@&quot; withString:@&quot;&quot;];</span><br><span class="line">        </span><br><span class="line">        //4.对特殊成员变量进行处理：</span><br><span class="line">        //判断当前类是否实现了协议方法，获取协议方法中规定的特殊变量的处理方式</span><br><span class="line">        NSDictionary *perpertyTypeDic;</span><br><span class="line">        if ([self respondsToSelector:@selector(modelContainerPropertyGenericClass)]) &#123;</span><br><span class="line">            perpertyTypeDic = [self performSelector:@selector(modelContainerPropertyGenericClass) withObject:nil];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        //4.1处理：字典的key与模型属性不匹配的问题，如id-&gt;uid</span><br><span class="line">        id anotherName = perpertyTypeDic[propertyName];</span><br><span class="line">        if(anotherName &amp;&amp; [anotherName isKindOfClass:[NSString class]])&#123;</span><br><span class="line">            value =  dictionary[anotherName];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        //4.2.处理：模型嵌套模型</span><br><span class="line">        if ([value isKindOfClass:[NSDictionary class]] &amp;&amp; ![ivarType hasPrefix:@&quot;NS&quot;]) &#123;</span><br><span class="line">            Class modelClass = NSClassFromString(ivarType);</span><br><span class="line">            if (modelClass != nil) &#123;</span><br><span class="line">                //将被嵌套字典数据也转化成Model</span><br><span class="line">                value = [modelClass gl_modelWithDictionary:value];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        //4.3处理：模型嵌套模型数组</span><br><span class="line">        //判断当前Vaue是一个数组，而且存在协议方法返回了perpertyTypeDic</span><br><span class="line">        if ([value isKindOfClass:[NSArray class]] &amp;&amp; perpertyTypeDic) &#123;</span><br><span class="line">             Class itemModelClass = perpertyTypeDic[propertyName];</span><br><span class="line">            //封装数组：将每一个子数据转化为Model</span><br><span class="line">            NSMutableArray *itemArray = @[].mutableCopy;</span><br><span class="line">            for (NSDictionary *itemDic in value) &#123;</span><br><span class="line">                id model = [itemModelClass gl_modelWithDictionary:itemDic];</span><br><span class="line">                [itemArray addObject:model];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            value = itemArray;</span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">        //5.使用KVC方法将Vlue更新到object中</span><br><span class="line">        if (value != nil) &#123;</span><br><span class="line">            [obj setValue:value forKey:propertyName];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    free(ivarList); //释放C指针</span><br><span class="line">    return obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>步骤2：分别创建各个数据模型Student、Address、Course</strong></p>
+<p><strong>Student类</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//Student.h文件</span><br><span class="line">#import &quot;NSObject+GLModel.h&quot;</span><br><span class="line">#import &quot;AddressModel.h&quot;</span><br><span class="line">#import &quot;CourseModel.h&quot;</span><br><span class="line">@interface StudentModel : NSObject&lt;GLModel&gt; //遵循协议</span><br><span class="line">//普通属性</span><br><span class="line">@property (nonatomic, copy) NSString *uid;</span><br><span class="line">@property(nonatomic,copy)NSString *name;</span><br><span class="line">@property (nonatomic, assign) NSInteger age;</span><br><span class="line">//嵌套模型</span><br><span class="line">@property (nonatomic, strong) AddressModel *address;</span><br><span class="line">//嵌套模型数组</span><br><span class="line">@property (nonatomic, strong) NSArray *courses;</span><br><span class="line">@end</span><br><span class="line">  </span><br><span class="line">#import &quot;StudentModel.h&quot;</span><br><span class="line">@implementation StudentModel</span><br><span class="line">+ (NSDictionary *)modelContainerPropertyGenericClass &#123;</span><br><span class="line">    //需要特别处理的属性</span><br><span class="line">    return @&#123;@&quot;courses&quot; : [CourseModel class],@&quot;uid&quot;:@&quot;id&quot;&#125;;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p><strong>Address类</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//AddressModel.h文件</span><br><span class="line">@interface AddressModel : NSObject</span><br><span class="line">@property (nonatomic, copy) NSString *country;  //国籍</span><br><span class="line">@property (nonatomic, copy) NSString *province; //省份</span><br><span class="line">@property (nonatomic, copy) NSString *city;     //城市</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">//-----------------优美的分割线------------------------</span><br><span class="line">//AddressModel.m文件</span><br><span class="line">#import &quot;AddressModel.h&quot;</span><br><span class="line">@implementation AddressModel</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p><strong>Course类</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//.h文件</span><br><span class="line"></span><br><span class="line">@interface CourseModel : NSObject</span><br><span class="line"></span><br><span class="line">@property (nonatomic, copy) NSString *name;  //课程名</span><br><span class="line">@property (nonatomic, copy) NSString *desc;  //课程描述</span><br><span class="line">@end</span><br><span class="line">  </span><br><span class="line">//.m文件</span><br><span class="line">#import &quot;CourseModel.h&quot;</span><br><span class="line">@implementation CourseModel</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p><strong>步骤3：测试字典转模型操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">//读取JSON数据</span><br><span class="line">NSDictionary *jsonData = [FileTools getDictionaryFromJsonFile:@&quot;Student&quot;];</span><br><span class="line">NSLog(@&quot;%@&quot;,jsonData);</span><br><span class="line"></span><br><span class="line">//字典转模型</span><br><span class="line">StudentModel *student = [StudentModel zs_modelWithDictionary:jsonData];</span><br><span class="line">CourseModel *courseModel = student.courses[0];</span><br><span class="line">NSLog(@&quot;%@&quot;,courseModel.name);</span><br><span class="line"></span><br><span class="line">//打印结果为：</span><br><span class="line">2019-07-09 16:48:02.525408+0800 RunTimeDemo[13567:666967] &#123;</span><br><span class="line">    address =     &#123;</span><br><span class="line">        country = &quot;\U4e2d\U56fd&quot;;</span><br><span class="line">        province = &quot;\U6cb3\U5357&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">    age = 18;</span><br><span class="line">    courses =     (</span><br><span class="line">                &#123;</span><br><span class="line">            desc = &quot;\U8bed\U6587\U8bfe&quot;;</span><br><span class="line">            name = Chinese;</span><br><span class="line">        &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">            desc = &quot;\U6570\U5b66\U8bfe&quot;;</span><br><span class="line">            name = Math;</span><br><span class="line">        &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">            desc = &quot;\U82f1\U8bed\U8bfe&quot;;</span><br><span class="line">            name = English;</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line">    id = 123456;</span><br><span class="line">    name = &quot;\U6d4b\U8bd5\U6570\U636e&quot;;</span><br><span class="line">    weight = 140;</span><br><span class="line">&#125;</span><br><span class="line">2019-07-09 16:48:02.525983+0800 RunTimeDemo[13567:666967] Chinese</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/25/cenue/" rel="next" title="隐私策略和用户协议">
+                <i class="fa fa-chevron-left"></i> 隐私策略和用户协议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/26/CATransform3D-动画1/" rel="prev" title="CATransform3D-动画1">
+                CATransform3D-动画1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">lang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#整体介绍"><span class="nav-number">1.</span> <span class="nav-text">整体介绍</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#一、动态方法交换：Method-Swizzling"><span class="nav-number"></span> <span class="nav-text">一、动态方法交换：Method Swizzling</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-动态方法交换示例"><span class="nav-number">1.</span> <span class="nav-text">1.动态方法交换示例</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-拦截并替换系统方法"><span class="nav-number">2.</span> <span class="nav-text">2.拦截并替换系统方法</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、实现分类添加新属性"><span class="nav-number"></span> <span class="nav-text">二、实现分类添加新属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、获取类的详细信息"><span class="nav-number"></span> <span class="nav-text">三、获取类的详细信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、方法动态解析与消息转发"><span class="nav-number"></span> <span class="nav-text">五、方法动态解析与消息转发</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-动态方法解析-Dynamic-Method-Resolution"><span class="nav-number"></span> <span class="nav-text">1.动态方法解析(Dynamic Method Resolution)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-消息接收者重定向"><span class="nav-number"></span> <span class="nav-text">2.消息接收者重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-消息重定向"><span class="nav-number"></span> <span class="nav-text">3.消息重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#六、动态操作属性"><span class="nav-number"></span> <span class="nav-text">六、动态操作属性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-动态修改属性变量"><span class="nav-number"></span> <span class="nav-text">1.动态修改属性变量</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
